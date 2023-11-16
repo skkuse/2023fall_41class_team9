@@ -2,19 +2,26 @@ from typing import Optional
 from fastapi import FastAPI
 from CodeModel import Code
 from datetime import datetime
+from pydantic import BaseModel
 import time
 import subprocess
 import uuid
 
 app = FastAPI()
 
+class Item(BaseModel):
+    name: str
+    code: Optional[str] = None
+
+
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Optional[str] = None):
-    return {"item_id": item_id, "q": q}
+@app.post("/send_request")
+async def send_request(item: Item):
+    
+    return {"name": "hi"}
 
 @app.post("/exp")
 def submit_code(codeModel:Code):
