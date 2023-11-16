@@ -59,7 +59,7 @@ class Home	extends	Component	{
 		console.log('# component render home');
 		return (
 		<div id="ga">
-			<Menubar/>
+			<Menubar page={"home"}/>
 			
 			<div style={{textAlign:"center", margin:"1px", fontSize:"22px"}} >Green Algorithms Home</div> 
 

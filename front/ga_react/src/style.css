@@ -1,11 +1,11 @@
 
 /* common */
 body{font-size:15px; margin:0}
-a{cursor:pointer;text-decoration: underline;}
+/* a{cursor:pointer;text-decoration: underline;} */
 select{resize:auto; height:25px}
 
 /* add fro ga */
-div {margin-left:5px; margin-right:5px; margin-top:3px; margin-bottom:3px}
+/* div {margin-left:5px; margin-right:5px; margin-top:3px; margin-bottom:3px} */
 
 /* table */
 .table tr td {

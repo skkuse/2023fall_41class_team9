@@ -37,7 +37,7 @@ class History	extends	Component	{
 		console.log('# component render History');
 		return (
 		<div id="ga">
-			<Menubar/>
+			<Menubar page={"history"}/>
 			
 			<div style={{textAlign:"center", margin:"1px", fontSize:"22px"}} >Green Algorithms History</div> 
 			<br/>

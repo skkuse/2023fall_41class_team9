@@ -10,15 +10,32 @@
     font-family: "Inter-Bold", Helvetica;
     font-size: 24px;
     font-weight: 700;
-    height: 25px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+    top: 66px;
     left: 338px;
+    height: 25px;
+    width: 69px;
+}
+
+.nav-bar .text-Home-underline {
+    color: #000000;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 24px;
+    font-weight: 700;
     letter-spacing: 0;
     line-height: normal;
     position: absolute;
     text-align: center;
     text-decoration: underline;
-    top: 66px;
     white-space: nowrap;
+    top: 66px;
+    left: 338px;
+    height: 25px;
     width: 69px;
 }
 
@@ -27,14 +44,32 @@
     font-family: "Inter-Bold", Helvetica;
     font-size: 24px;
     font-weight: 700;
-    height: 25px;
-    left: 518px;
     letter-spacing: 0;
     line-height: normal;
     position: absolute;
     text-align: center;
-    top: 66px;
+    text-decoration: none;
     white-space: nowrap;
+    top: 66px;
+    left: 518px;
+    height: 25px; 
+    width: 87px;
+}
+
+.nav-bar .text-History-underline {
+    color: #000000;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    text-align: center;
+    text-decoration: underline;
+    white-space: nowrap;
+    top: 66px;
+    left: 518px;
+    height: 25px; 
     width: 87px;
 }
 
@@ -43,14 +78,32 @@
     font-family: "Inter-Bold", Helvetica;
     font-size: 24px;
     font-weight: 700;
-    height: 25px;
-    left: 720px;
     letter-spacing: 0;
     line-height: normal;
     position: absolute;
     text-align: center;
-    top: 64px;
+    text-decoration: none;
     white-space: nowrap;
+    top: 64px;
+    left: 720px;
+    height: 25px;
+    width: 52px;
+}
+
+.nav-bar .text-Tips-underline {
+    color: #000000;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    text-align: center;
+    text-decoration: underline;
+    white-space: nowrap;
+    top: 64px;
+    left: 720px;
+    height: 25px;
     width: 52px;
 }
 

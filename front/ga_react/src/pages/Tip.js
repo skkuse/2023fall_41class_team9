@@ -9,7 +9,7 @@ function Tip() {
   console.log(idx);
   return (
     <div className='each-tip-page'>
-      <Menubar />
+      <Menubar page={"tip"}/>
       <div className='container'>
         <p className='title'>Title</p>
         <p className='content'>

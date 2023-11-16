@@ -16,7 +16,7 @@ class Board	extends	Component	{
   render() {
     return (
       <div className="tips-page">
-        <Menubar />
+        <Menubar page={"tips"}/>
         <div className='tips-table'>
           <Tip title='example1' contents='example1' idx={0} />
           <Tip title='example2' contents='example2' idx={1} />
