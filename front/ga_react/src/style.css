@@ -21,8 +21,8 @@ div {margin-left:5px; margin-right:5px; margin-top:3px; margin-bottom:3px}
 
 
 .menubar{
-	//background:#e0e0e0;
-    //display: flex;
+	/* //background:#e0e0e0;
+    //display: flex; */
 	margin: 0px;
 }
 
@@ -35,7 +35,7 @@ div {margin-left:5px; margin-right:5px; margin-top:3px; margin-bottom:3px}
 .menubar li a{
     font-weight: bold;
     color: black;
-    //text-decoration: none;
+    /* //text-decoration: none; */
 }
 
 /*.menubar li a:hover{

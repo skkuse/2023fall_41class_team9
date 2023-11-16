@@ -5,9 +5,10 @@ import {Component} from 'react'
 import { BrowserRouter, Routes, Route }	from 'react-router-dom'
 
 import Home	from './Home'
-import Menubar from './Menubar'
 import History	from './History'
-
+import Board from './pages/Board.js'
+import Tip from './pages/Tip.js'
+import Menubar from './components/Menubar.js'
 import './style.css'
 
 class App extends Component {
@@ -27,6 +28,8 @@ class App extends Component {
 						<Route path="/" exact={true} element={<Menubar/>} />
 						<Route path="/home"  element={<Home/>} />
 						<Route path="/history"  element={<History/>} />
+						<Route path="/tips" exact={true} element={<Board/>}/>
+						<Route path='/tips/:idx' exact={true} element={<Tip/>}/>
 					</Routes>
 				</BrowserRouter>
 				

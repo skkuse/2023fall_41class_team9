@@ -1,0 +1,98 @@
+.nav-bar {
+    background-color: #ffffff;
+    height: 130px;
+    position: relative;
+    width: 100%;
+}
+
+.nav-bar .text-Home {
+    color: #000000;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 24px;
+    font-weight: 700;
+    height: 25px;
+    left: 338px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    text-align: center;
+    text-decoration: underline;
+    top: 66px;
+    white-space: nowrap;
+    width: 69px;
+}
+
+.nav-bar .text-History {
+    color: #000000;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 24px;
+    font-weight: 700;
+    height: 25px;
+    left: 518px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    text-align: center;
+    top: 66px;
+    white-space: nowrap;
+    width: 87px;
+}
+
+.nav-bar .text-Tips {
+    color: #000000;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 24px;
+    font-weight: 700;
+    height: 25px;
+    left: 720px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    text-align: center;
+    top: 64px;
+    white-space: nowrap;
+    width: 52px;
+}
+
+.nav-bar .rectangle {
+    background-color: #19a459;
+    height: 15px;
+    left: 0;
+    position: absolute;
+    top: 115px;
+    width: 100%;
+}
+
+.nav-bar .logo {
+    height: 85px;
+    left: 35px;
+    position: absolute;
+    top: 16px;
+    width: 192px;
+}
+
+.nav-bar .logo .background {
+    background-color: #36e519;
+    border: 1px solid;
+    border-color: #36e519;
+    border-radius: 50px;
+    height: 85px;
+    position: relative;
+    width: 190px;
+}
+
+.nav-bar .logo .background .text {
+    color: #ffffff;
+    font-family: "Inter-BlackItalic", Helvetica;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 900;
+    height: 60px;
+    left: 30px;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    text-align: center;
+    top: 8px;
+    width: 130px;
+}
