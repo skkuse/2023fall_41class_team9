@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import ReactDOM	from 'react-dom';
 import axios from 'axios';
 
-import Menubar from './Menubar'
+import Menubar from './components/Menubar.js'
 const divSt = {marginLeft:"5px", marginRight:"5px", marginTop:"3px", marginBottom:"3px"};
 
 class Home	extends	Component	{
