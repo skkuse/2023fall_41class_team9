@@ -10,10 +10,6 @@ class Item(BaseModel):
     name: str
     code: Optional[str] = None
 
-@app.get("/")
-async def read_root():
-    print("hello")
-    return {"Hello": "World"}
 
 @app.post("/send_request")
 async def send_request(item: Item):
