@@ -21,7 +21,7 @@ def submit_code(codeModel:Code):
 
     # 파일 저장하기
     now = datetime.now()
-    file_name_exp = 'java_files/'+now.strftime('%Y-%m-%d-%H:%M:%S') + str(uuid.uuid4()) +'.java'   # uuid1은 시간기준, uuid4 랜덤
+    file_name_exp = 'java_files/'+now.strftime('%Y-%m-%d-%H%M%S') + str(uuid.uuid4()) +'.java'   # uuid1은 시간기준, uuid4 랜덤
     file_name = 'Test.java'
     with open(file_name_exp, 'w') as file:
         file.write(codeModel.code)
