@@ -21,22 +21,20 @@ def submit_code(codeModel:Code):
 
     # 파일 저장하기
     now = datetime.now()
-    file_name_exp = 'java_files/'+now.strftime('%Y-%m-%d-%H%M%S') + str(uuid.uuid4()) +'.java'   # uuid1은 시간기준, uuid4 랜덤
-    file_name = 'Test.java'
-    with open(file_name_exp, 'w') as file:
-        file.write(codeModel.code)
+    file_name_exp = now.strftime('GA%Y%m%d_%H%M%S_') + str(uuid.uuid4().hex) +'.java'   # uuid1은 시간기준, uuid4 랜덤
+    # file_name = 'Test.java'
+    with open('java_files/'+file_name_exp, 'w') as file:
+        file.write(codeModel.code.replace('Test', file_name_exp[:-5]))
 
 
-    ##TODO
-    # - 실제 자바 파일 입력받기 - 중괄호 줄바꿈
-    # - 클래스명을 어떻게 할지
-    # 자바 실행 명령어
-    java_compile = ["javac", "./java_files/" + file_name]
-    subprocess.Popen(java_compile, cwd=None, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    # 자바 컴파일
+    java_compile = ["javac", "./java_files/" + file_name_exp]
+    compile_process = subprocess.Popen(java_compile, cwd=None, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    compile_process.wait(timeout=None)
     
-    java_command = ["java", "-cp", "./java_files", file_name[:-5]]
-
     # 자바 프로세스 생성
+    java_command = ["java", "-cp", "./java_files", file_name_exp[:-5]]
+
     start = time.time()
     java_process = subprocess.Popen(java_command, cwd=None, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
