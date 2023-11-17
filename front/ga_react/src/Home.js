@@ -92,7 +92,7 @@ function Home(props) {
 
 			<div>source code</div>
 			<div>
-				<input id="ifile" type="file" onChange={this.readFile} ></input>
+				<input id="ifile" type="file" onChange={readFile} ></input>
 			</div>
 
 				<div>
@@ -104,7 +104,7 @@ function Home(props) {
 			</div>
 
 			<div>
-				<button id="id" onClick={this.save}>run and save</button>
+				<button id="id" onClick={save}>run and save</button>
 			</div>
 			
 			<div style={{display:"flex", border:"1px solid", height:"30vh"}} >
