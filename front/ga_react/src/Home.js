@@ -1,27 +1,27 @@
-import React, {Component} from 'react';
+import React, {useState, useEffect} from 'react';
 import ReactDOM	from 'react-dom';
 import axios from 'axios';
 
 import Menubar from './Menubar'
+
+//css use example
 const divSt = {marginLeft:"5px", marginRight:"5px", marginTop:"3px", marginBottom:"3px"};
 
-class Home	extends	Component	{
-	constructor() {
-		super();
-	}
+function Home(props) {
+	const [tresult,setTResult] = useState(
+		{"runTime":"10 ms","footprint":"35.23 mg",
+		 "carIndex":"2.01e-04 km","planeIndex":"7e-05 %","treeIndex":"2.01e-04",
+		 "coreNo":"4","memory":"4 GB"
+		} 
+	);
 
-	state =	{
-	}
+	//componentDidMount =>
+	useEffect(()=>{
+		console.log('component mounted!')
+	},[])
 
-	componentDidMount()	{
-		console.log('# component did mount home');
-	}
 
-	hi = () => {
-		console.log('hi~')
-	}
-
-	readFile = () => {
+	const readFile = () => {
 		let file = document.getElementById('ifile').files[0];
 		let reader = new FileReader();
 		reader.readAsText(file);
@@ -36,36 +36,65 @@ class Home	extends	Component	{
 		};
 	}
 
-	save = () => {
-		/*
+	const save = () => {
 		console.log('hi save~');
-		let text = document.getElementById('ita').value;
-		console.log(text);
 		
-		let param = {text: text};
+		let code = document.getElementById('ita').value;
+		console.log("#code");
+		console.log(code);
+		
+		let title = document.getElementById('title').value;
+		
+		let param = {code: code, title: title};
+
 		axios.post('/save.do', param)
 		.then(res => {
-			console.log('# '+JSON.stringify(res.data));
+			console.log('#result: '+JSON.stringify(res.data));
+			
+			/*
+			실험결과
+			run time : 10 ms
+			carbon footprint : 35.23 mg
+			car index : 2.01e-04 km
+			plane index : 7e-05 %
+			tree index : 2.01e-04
+    	
+			서버 시스템 사양
+			Number of cores : 4
+			Memory available : 4 GB
+			*/
+			
+			document.getElementById('runTime').innerHTML = "run time : " + res.data.runTime;
+			document.getElementById('footprint').innerHTML = "carbon footprint : " + res.data.footprint;
+			document.getElementById('carIndex').innerHTML = "car index : " + res.data.carIndex;
+			document.getElementById('planeIndex').innerHTML = "plane index : " + res.data.planeIndex;
+			document.getElementById('treeIndex').innerHTML = "tree index : " + res.data.teeIndex;
+			document.getElementById('coreNo').innerHTML = "Number of cores : " + res.data.coreNo;
+			document.getElementById('memory').innerHTML = "Memory available : " + res.data.memory;
 		}).catch(error => {
-			console.log('#load error '+error)
-			this.setState({message: 'load 오류입니다'})
+			console.log('#save error '+error)
 		})
-		*/
-		
-		 console.log("~"+document.getElementById("ename").value);
+	}
+
+	const loadTestData = () => {
+		document.getElementById('runTime').innerHTML = "run time : " + tresult.runTime;
+		document.getElementById('footprint').innerHTML = "carbon footprint : " + tresult.footprint;
+		document.getElementById('carIndex').innerHTML = "car index : " + tresult.carIndex;
+		document.getElementById('planeIndex').innerHTML = "plane index : " + tresult.planeIndex;
+		document.getElementById('treeIndex').innerHTML = "tree index : " + tresult.teeIndex;
+		document.getElementById('coreNo').innerHTML = "Number of cores : " + tresult.coreNo;
+		document.getElementById('memory').innerHTML = "Memory available : " + tresult.memory;
 	}
 	
-	render() {
-		console.log('# component render home');
-		return (
-		<div id="ga">
+	return (
+		<div>
 			<Menubar/>
 			
 			<div style={{textAlign:"center", margin:"1px", fontSize:"22px"}} >Green Algorithms Home</div> 
 
 			<div>source code</div>
 			<div>
-				<input id="ifile" type="file" onChange={this.readFile} ></input>
+				<input id="ifile" type="file" onChange={readFile} ></input>
 			</div>
 
 			<div>
@@ -73,45 +102,30 @@ class Home	extends	Component	{
 			</div>
 
 			<div>
-				experiment name : <input style={{width: "30%"}} id="ename"></input>
+				experiment name : <input style={{width: "30%"}} id="title"></input>
 			</div>
 
 			<div>
-				<button id="id" onClick={this.save}>run and save</button>
+				<button id="id" onClick={save}>run and save</button>
 			</div>
 			
 			<div style={{display:"flex", border:"1px solid", height:"30vh"}} >
 				<div style={{width:"50%", border:"1px solid"}}>
 					<div>서버 시스템 사양</div>
-					<div>
-						Number of cores : 4
-					</div>
-					<div>
-						Nemory available : 4 GB
-					</div>
+					<div id="coreNo"></div>
+					<div id="memory"></div>
 				</div>
 				<div style={{width:"50%", border:"1px solid"}}>
 					<div>실험결과</div>
-					<div>
-						run time : 10 ms
-					</div>
-					<div>
-						carbon footprint: 35.23 mg 
-					</div>
-					<div>
-						car index : 2.01e-04 km 
-					</div>
-					<div>
-						plane index : 7e-05 %
-					</div>
-					<div>
-						tree index : 2.01e-04
-					</div>
+					<div id="runTime"></div>
+					<div id="footprint"></div>
+					<div id="carIndex"></div>
+					<div id="planeIndex"></div>
+					<div id="treeIndex"></div>
 				</div>
 			</div>
 		</div>
-		)
-	}
+	)
 }
 
 export default Home;
