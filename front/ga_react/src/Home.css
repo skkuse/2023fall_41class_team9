@@ -2,18 +2,18 @@
     border: 2px black solid;
 }
 
-.result { 
+.exp { 
     display: flex;
     border: 1px solid;
     height: 30vh;
 }
 
-.result .sysenv { 
+.exp .sysenv { 
     width: 50%;
     border: 1px solid;
 }
 
-.result .result{ 
+.exp .result{ 
     width: 50%;
     border: 1px solid;
 }
