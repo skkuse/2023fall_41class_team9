@@ -1,13 +1,17 @@
-import React, {Component} from 'react';
+import React, {Component, createRef} from 'react';
 import ReactDOM	from 'react-dom';
 import axios from 'axios';
 
+import Editor from '@monaco-editor/react';
 import Menubar from './components/Menubar.js'
+import './Home.css'
+
 const divSt = {marginLeft:"5px", marginRight:"5px", marginTop:"3px", marginBottom:"3px"};
 
 class Home	extends	Component	{
 	constructor() {
 		super();
+		this.editorRef = createRef(null);
 	}
 
 	state =	{
@@ -28,8 +32,9 @@ class Home	extends	Component	{
 
 		reader.onload = function() {
 			console.log(reader.result);
-			var ita = document.getElementById('ita');
-			ita.value = reader.result;
+			// let ita = document.getElementById('ita');
+			// ita.value = reader.result;
+			console.log(this.editorRef.getValue());
 		};
 		reader.onerror = function() {
 			console.log(reader.error);
@@ -54,7 +59,20 @@ class Home	extends	Component	{
 		
 		 console.log("~"+document.getElementById("ename").value);
 	}
+
+	handleEditorValidation(markers) {
+		// model markers
+		markers.forEach((marker) => console.log('onValidate:', marker.message));
+	}
+
+	handleEditorChange(value, event) {
+		console.log('here is the current model value:', value);
+	}
 	
+  	handleEditorDidMount(editor, monaco) {
+		this.editorRef = editor;
+		console.log("mount editor", editor);
+	}
 	render() {
 		console.log('# component render home');
 		return (
@@ -63,14 +81,25 @@ class Home	extends	Component	{
 			
 			<div style={{textAlign:"center", margin:"1px", fontSize:"22px"}} >Green Algorithms Home</div> 
 
-			<div>source code</div>
-			<div>
-				<input id="ifile" type="file" onChange={this.readFile} ></input>
+			<div className='code-editor' style={divSt}>
+				<div>source code</div>
+				<div><input id="ifile" type="file" onChange={this.readFile} ></input></div>
+				<div className='editor'> 
+					<Editor
+						height="20vh"
+						defaultLanguage="java"
+						defaultValue="// some comment"
+						onMount={this.handleEditorDidMount}
+						onValidate={this.handleEditorValidation}
+						onChange={this.handleEditorChange}
+					/>
+				</div>
 			</div>
+			
 
-			<div>
-				<textarea id="ita" style={{width:"100%", height:"20vh"}} />
-			</div>
+			
+
+			
 
 			<div>
 				experiment name : <input style={{width: "30%"}} id="ename"></input>
