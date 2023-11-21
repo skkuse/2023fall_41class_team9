@@ -1,4 +1,19 @@
 .editor {
     border: 2px black solid;
+}
 
+.result { 
+    display: flex;
+    border: 1px solid;
+    height: 30vh;
+}
+
+.result .sysenv { 
+    width: 50%;
+    border: 1px solid;
+}
+
+.result .result{ 
+    width: 50%;
+    border: 1px solid;
 }

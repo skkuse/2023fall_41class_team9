@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import {useCookies} from 'react-cookie'
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 
@@ -9,9 +10,8 @@ import './Home.css'
 const divSt = { marginLeft: "5px", marginRight: "5px", marginTop: "3px", marginBottom: "3px" };
 
 function Home(props) {
-
-	editorRef = useRef();
-
+	const editorRef = useRef(null); 
+	const [cookies, setCookie, removeCookie] = useCookies(['session_key']);
 	const [tresult, setTResult] = useState(
 		{
 			"runTime": "10 ms", "footprint": "35.23 mg",
@@ -25,31 +25,29 @@ function Home(props) {
 		console.log('component mounted!')
 	}, [])
 
-
 	const readFile = () => {
 		let file = document.getElementById('ifile').files[0];
 		let reader = new FileReader();
 		reader.readAsText(file);
-
 		reader.onload = function () {
-			console.log(reader.result);
-			// let ita = document.getElementById('ita');
-			// ita.value = reader.result;
-			console.log(editorRef.getValue());
+			editorRef.current.setValue(reader.result)
 		};
 		reader.onerror = function () {
 			console.log(reader.error);
 		};
 	}
 
-	const save = () => {
-		console.log('hi save~');
-		let code = document.getElementById('ita').value;
-		console.log("#code");
-		console.log(code);
-		let title = document.getElementById('title').value;
-		let param = { code: code, title: title };
-		axios.post('/save.do', param)
+	async function save () {
+		const code = editorRef.current.getValue();
+		const title = document.getElementById('title').value;
+		const session_key = cookies.session_key;
+		console.log('session_key:',session_key)
+		const headers = {'session_key': session_key}
+		const param = { 
+			"code": code, 
+			"title": title 
+		};
+		await axios.post('/exp', param,{headers:headers})
 			.then(res => {
 				console.log('#result: ' + JSON.stringify(res.data));
 
@@ -88,25 +86,14 @@ function Home(props) {
 		document.getElementById('memory').innerHTML = "Memory available : " + tresult.memory;
 	}
 
-	const handleEditorValidation = (markers) => {
-		// model markers
-		markers.forEach((marker) => console.log('onValidate:', marker.message));
-	}
+	// monaco editor handlers
+	const handleEditorValidation = (markers) => {markers.forEach((marker) => console.log('onValidate:', marker.message));}
+	const handleEditorChange = (value, event) => {console.log('here is the current model value:', value);}
+	const handleEditorDidMount = (editor, monaco) => {editorRef.current = editor;}
 
-	const handleEditorChange = (value, event) => {
-		console.log('here is the current model value:', value);
-	}
-
-	const handleEditorDidMount = (editor, monaco) => {
-		this.editorRef = editor;
-		console.log("mount editor", editor);
-	}
-
-	console.log('# component render home');
 	return (
-		<div id="ga">
+		<div>
 			<Menubar page={"home"} />
-
 			<div style={{ textAlign: "center", margin: "1px", fontSize: "22px" }} >Green Algorithms Home</div>
 			<div className='code-editor' style={divSt}>
 				<div>source code</div>
@@ -122,11 +109,12 @@ function Home(props) {
 					/>
 				</div>
 			</div>
-			<div> experiment name : <input style={{ width: "30%" }} id="ename"></input> </div>
-			<div><button id="id" onClick={save}>run and save</button></div>
+			<div> experiment name : <input style={{ width: "30%" }} id="title"></input> </div>
 
-			<div style={{ display: "flex", border: "1px solid", height: "30vh" }} >
-				<div style={{ width: "50%", border: "1px solid" }}>
+			<div><button onClick={save}>run and save</button></div>
+
+			<div className='result' >
+				<div className='sysenv'>
 					<div>서버 시스템 사양</div>
 					<div>
 						Number of cores : 4
@@ -135,7 +123,7 @@ function Home(props) {
 						Nemory available : 4 GB
 					</div>
 				</div>
-				<div style={{ width: "50%", border: "1px solid" }}>
+				<div className='result'>
 					<div>실험결과</div>
 					<div id="runTime"></div>
 					<div id="footprint"></div>
