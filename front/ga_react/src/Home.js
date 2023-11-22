@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {useCookies} from 'react-cookie'
-import { trackPromise } from 'react-promise-tracker';
-import ReactDOM from 'react-dom';
 import axios from 'axios';
 
+import Loading from './components/Loading.js';
 import Editor from '@monaco-editor/react';
 import Menubar from './components/Menubar.js'
 import './Home.css'
@@ -11,25 +10,15 @@ import './Home.css'
 const divSt = { marginLeft: "5px", marginRight: "5px", marginTop: "3px", marginBottom: "3px" };
 
 function Home(props) {
-	const editorRef = useRef(null); 
+	const editorRef = useRef(null);
 	const [cookies, setCookie, removeCookie] = useCookies(['session_key']);
-	const [exp, setExp] = useState(
-		{
-			"id":1,
-			"title":"test",
-			"run_time": 10, 
-			"footprint": 35.23,
-			"car_index": 2.01e-04, 
-			"plane_index": 7e-05, 
-			"tree_index": 2.01e-04,
-			"create_time":"20231213"
-		}
-	);
+	const [isLoading, setLoading] = useState(false);
+	const [exp, setExp] = useState({});
 
 	//componentDidMount =>
 	useEffect(() => {
 		console.log('component mounted!')
-	}, [exp])
+	}, [])
 
 	const readFile = () => {
 		let file = document.getElementById('ifile').files[0];
@@ -43,7 +32,8 @@ function Home(props) {
 		};
 	}
 
-	const save = async () => {
+	const run = async () => {
+		setLoading(true);
 		const code = editorRef.current.getValue();
 		const title = document.getElementById('title').value;
 		const session_key = cookies.session_key;
@@ -58,25 +48,13 @@ function Home(props) {
 			.then(res => {
 				console.log('#result: ' + JSON.stringify(res.data));
 				setExp(res.data);
-				// document.getElementById('runTime').innerHTML = "run time : " + res.data.run_time;
-				// document.getElementById('footprint').innerHTML = "carbon footprint : " + res.data.footprint;
-				// document.getElementById('carIndex').innerHTML = "car index : " + res.data.car_index;
-				// document.getElementById('planeIndex').innerHTML = "plane index : " + res.data.plane_index;
-				// document.getElementById('treeIndex').innerHTML = "tree index : " + res.data.tree_index;
 			}).catch(error => {
 				alert('#save error ' + error)
 			})
-	}
 
-	// const loadTestData = () => {
-	// 	document.getElementById('runTime').innerHTML = "run time : " + tresult.runTime;
-	// 	document.getElementById('footprint').innerHTML = "carbon footprint : " + tresult.footprint;
-	// 	document.getElementById('carIndex').innerHTML = "car index : " + tresult.carIndex;
-	// 	document.getElementById('planeIndex').innerHTML = "plane index : " + tresult.planeIndex;
-	// 	document.getElementById('treeIndex').innerHTML = "tree index : " + tresult.teeIndex;
-	// 	document.getElementById('coreNo').innerHTML = "Number of cores : " + tresult.coreNo;
-	// 	document.getElementById('memory').innerHTML = "Memory available : " + tresult.memory;
-	// }
+		setExp({id:1,title:"123",run_time:123, car_index:1222});
+		setLoading(false);
+	}
 
 	// monaco editor handlers
 	const handleEditorValidation = (markers) => {markers.forEach((marker) => console.log('onValidate:', marker.message));}
@@ -85,8 +63,11 @@ function Home(props) {
 
 	return (
 		<div>
+			{isLoading && <Loading className="loading"/>}
 			<Menubar page={"home"} />
 			<div style={{ textAlign: "center", margin: "1px", fontSize: "22px" }} >Green Algorithms Home</div>
+			<div><button onClick={run}>run and save</button></div>
+			<div> experiment name : <input style={{ width: "30%" }} id="title"></input> </div>
 			<div className='code-editor' style={divSt}>
 				<div>source code</div>
 				<div><input id="ifile" type="file" onChange={readFile} ></input></div>
@@ -101,9 +82,7 @@ function Home(props) {
 					/>
 				</div>
 			</div>
-			<div> experiment name : <input style={{ width: "30%" }} id="title"></input> </div>
 
-			<div><button onClick={save}>run and save</button></div>
 
 			<div className='exp' >
 				<div className='sysenv'>

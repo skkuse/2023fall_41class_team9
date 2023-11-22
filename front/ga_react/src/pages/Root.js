@@ -14,6 +14,13 @@ function Root(props) {
         else{
             console.log(session_key);
         }
+        axios.post('/', null,{headers:headers})
+        .then(res => {
+            console.log('#result: ' + JSON.stringify(res.data));
+            setCookie('session_key', res.data.session_key);
+        }).catch(error => {
+            alert('#save error ' + error)
+        })
         const some_key = '123456';
         setCookie('session_key', some_key);
 		console.log('component mounted!');
