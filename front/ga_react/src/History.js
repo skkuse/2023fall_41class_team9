@@ -49,6 +49,10 @@ function History(props) {
 		navigate('/compare', {state: {id1: "001", id2: "002"}});
 	}
 
+	const viewSinglePage = () => {
+		navigate('/single', {state: {id: ["001"]}});
+	}
+
 	//render() =>
 	return (
 		<div id="ga">
@@ -76,7 +80,7 @@ function History(props) {
 						{ expList.map(exp => (
 							<tr	align="center" key={exp.id}>
 								<td><input type="checkbox" id="id" name="name" /></td>
-								<td><a href="/home">{exp.title}</a></td>
+								<td><a onClick={viewSinglePage}>{exp.title}</a></td>
 								<td>{exp.footprint}</td>
 								<td>{exp.runTime}</td>
 								<td>{exp.createTime}</td>

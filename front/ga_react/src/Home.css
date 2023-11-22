@@ -5,7 +5,7 @@
 .exp { 
     display: flex;
     border: 1px solid;
-    height: 30vh;
+    height: auto;
 }
 
 .exp .sysenv { 
@@ -16,5 +16,10 @@
 .exp .result{ 
     width: 50%;
     border: 1px solid;
+}
+.exp .result .row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
 }
 

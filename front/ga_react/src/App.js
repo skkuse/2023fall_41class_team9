@@ -9,6 +9,7 @@ import Board from './pages/Board.js'
 import Tip from './pages/Tip.js'
 import Root from './pages/Root.js'
 import Compare	from './Compare'
+import SingleExp from './pages/SingleExp.js'
 
 import './style.css'
 
@@ -25,6 +26,7 @@ class App extends Component {
 							<Route path="/tips" exact={true} element={<Board />} />
 							<Route path='/tips/:idx' exact={true} element={<Tip />} />
 							<Route path="/compare" element={<Compare />} />
+							<Route path="/single" exact={true} element={<SingleExp />}/>
 						</Routes>
 					</BrowserRouter>
 				</CookiesProvider>

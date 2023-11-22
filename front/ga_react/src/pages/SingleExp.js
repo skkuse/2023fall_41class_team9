@@ -5,103 +5,73 @@
 <a href="https://www.flaticon.com/kr/free-icon/tree_489969?term=%EB%82%98%EB%AC%B4&page=1&position=1&origin=search&related_id=489969" title="나무 아이콘">나무 아이콘  제작자: Freepik - Flaticon</a>
 */
 
-
 import React, { useState, useEffect, useRef } from 'react';
+import Editor from '@monaco-editor/react';
+import Menubar from '../components/Menubar.js'
+import ResultBox from '../components/ResultBox.js';
+import Loading from '../components/Loading.js';
+import '../Home.css'
+import { useLocation } from 'react-router-dom';
 import {useCookies} from 'react-cookie'
 import axios from 'axios';
 
-import Loading from './components/Loading.js';
-import Editor from '@monaco-editor/react';
-import Menubar from './components/Menubar.js'
-import ResultBox from './components/ResultBox.js';
-import './Home.css'
-
 const divSt = { marginLeft: "5px", marginRight: "5px", marginTop: "3px", marginBottom: "3px" };
 
-function Home(props) {
+function SingleExp(props) {
 	const editorRef = useRef(null);
-	const [cookies, setCookie, removeCookie] = useCookies(['session_key']);
-	const [isLoading, setLoading] = useState(false);
+    const [cookies, setCookie, removeCookie] = useCookies(['session_key']);
+    const [isLoading, setLoading] = useState(false);
 	const [exp, setExp] = useState({});
-
+    const location = useLocation();
 	//componentDidMount =>
 	useEffect(() => {
 		console.log('component mounted!')
+        requestExp();
 	}, [])
 
-	const readFile = () => {
-		let file = document.getElementById('ifile').files[0];
-		let reader = new FileReader();
-		reader.readAsText(file);
-		reader.onload = function () {
-			editorRef.current.setValue(reader.result)
-		};
-		reader.onerror = function () {
-			console.log(reader.error);
-		};
-	}
-
-	const run = async () => {
-		setLoading(true);
-		const code = editorRef.current.getValue();
-		const title = document.getElementById('title').value;
-		const session_key = cookies.session_key;
-		console.log('session_key:',session_key)
-		const headers = {'session_key': session_key}
-		const param = { 
-			"code": code, 
-			"title": title 
-		};
-		
-		await axios.post('/exp', param,{headers:headers})
-			.then(res => {
-				console.log('#result: ' + JSON.stringify(res.data));
-				setExp(res.data);
-			}).catch(error => {
-				alert('#save error ' + error)
-			})
-
-		setExp({id:1,title:"123",run_time:123, car_index:1222, footprint:100, tree_index:22, plane_index:44});
-		setLoading(false);
-	}
+    const requestExp = async () => {
+        setLoading(true);
+        console.log(location.state.id);
+        const session_key = cookies.session_key
+        const body = {'id_list': location.state.id};
+        const headers = {'session_key':session_key};
+        console.log(session_key);
+        await axios.post('/exp', body, { headers: headers })
+            .then(res => {
+                console.log('#result: ' + JSON.stringify(res.data));
+                setExp(res.data);
+            }).catch(error => {
+                alert('#save error ' + error)
+            })
+        setLoading(false);
+    }
 
 	// monaco editor handlers
-	const handleEditorValidation = (markers) => {markers.forEach((marker) => console.log('onValidate:', marker.message));}
-	const handleEditorChange = (value, event) => {console.log('here is the current model value:', value);}
 	const handleEditorDidMount = (editor, monaco) => {editorRef.current = editor;}
 
 	return (
 		<div>
-			{isLoading && <Loading className="loading"/>}
-			<Menubar page={"home"} />
+            {isLoading && <Loading className="loading"/>}
+			<Menubar page />
 			<div style={{ textAlign: "center", margin: "1px", fontSize: "22px" }} >Green Algorithms Home</div>
-			<div><button onClick={run}>run and save</button></div>
-			<div> experiment name : <input style={{ width: "30%" }} id="title"></input> </div>
+			<div> experiment name : </div>
 			<div className='code-editor' style={divSt}>
 				<div>source code</div>
-				<div><input id="ifile" type="file" onChange={readFile} ></input></div>
 				<div className='editor'>
 					<Editor
 						height="40vh"
 						defaultLanguage="java"
-						defaultValue="// some comment"
+						defaultValue={exp.code}
 						onMount={handleEditorDidMount}
-						onValidate={handleEditorValidation}
-						onChange={handleEditorChange}
+                        options={{readOnly: true}}
 					/>
 				</div>
 			</div>
-
-
 			<div className='exp' >
 				<div className='sysenv'>
 					<div>서버 시스템 사양</div>
-					<div>
-						Number of cores : 4
-					</div>
-					<div>
-						Nemory available : 4 GB
-					</div>
+					<div>Number of cores : 4</div>
+					<div>Nemory available : 4 GB</div>
 				</div>
 				<div className='result'>
 					<div className='row'>
@@ -126,4 +96,4 @@ function Home(props) {
 }
 
 
-export default Home;
+export default SingleExp;
