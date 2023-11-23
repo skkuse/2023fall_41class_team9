@@ -16,8 +16,6 @@ import Menubar from './components/Menubar.js'
 import ResultBox from './components/ResultBox.js';
 import './Home.css'
 
-const divSt = { marginLeft: "5px", marginRight: "5px", marginTop: "3px", marginBottom: "3px" };
-
 function Home(props) {
 	const editorRef = useRef(null);
 	const [cookies, setCookie, removeCookie] = useCookies(['session_key']);
@@ -46,14 +44,14 @@ function Home(props) {
 		const code = editorRef.current.getValue();
 		const title = document.getElementById('title').value;
 		const session_key = cookies.session_key;
-		console.log('session_key:',session_key)
-		const headers = {'session_key': session_key}
-		const param = { 
-			"code": code, 
-			"title": title 
+		const headers = {"Authorization": session_key}
+		const body = { 
+			"title": title,
+			"code": code
 		};
-		
-		await axios.post('/exp', param,{headers:headers})
+		console.log(headers);
+		console.log(body);
+		await axios.post('/exp', body,{headers:headers})
 			.then(res => {
 				console.log('#result: ' + JSON.stringify(res.data));
 				setExp(res.data);
@@ -67,7 +65,6 @@ function Home(props) {
 
 	// monaco editor handlers
 	const handleEditorValidation = (markers) => {markers.forEach((marker) => console.log('onValidate:', marker.message));}
-	const handleEditorChange = (value, event) => {console.log('here is the current model value:', value);}
 	const handleEditorDidMount = (editor, monaco) => {editorRef.current = editor;}
 
 	return (
@@ -75,19 +72,21 @@ function Home(props) {
 			{isLoading && <Loading className="loading"/>}
 			<Menubar page={"home"} />
 			<div style={{ textAlign: "center", margin: "1px", fontSize: "22px" }} >Green Algorithms Home</div>
-			<div><button onClick={run}>run and save</button></div>
-			<div> experiment name : <input style={{ width: "30%" }} id="title"></input> </div>
-			<div className='code-editor' style={divSt}>
-				<div>source code</div>
-				<div><input id="ifile" type="file" onChange={readFile} ></input></div>
+			<div className='code-editor'>
+				<div className='editor-header'>
+					<div style={{flex:0}}><input id="ifile" type="file" onChange={readFile} ></input></div>
+					<div style={{flex:1}}> experiment name : <input style={{ width: "50%" }} id="title"></input> </div>
+					<button className='run-button' onClick={run}>
+						<div className='text-run'>Run</div>
+					</button>
+				</div>
 				<div className='editor'>
 					<Editor
-						height="40vh"
+						height="65vh"
 						defaultLanguage="java"
 						defaultValue="// some comment"
 						onMount={handleEditorDidMount}
 						onValidate={handleEditorValidation}
-						onChange={handleEditorChange}
 					/>
 				</div>
 			</div>

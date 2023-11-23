@@ -5,7 +5,6 @@ import "./menubar.css";
 import { Link } from "react-router-dom";
 
 const MenuBar = ({page}) => {
-    console.log(page)
     return (
         <div className="nav-bar">
             {page === "home" ? <Link className='text-Home-underline' to='/home'>Home</Link> : <Link className='text-Home' to='/home'>Home</Link>}
