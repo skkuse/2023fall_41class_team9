@@ -8,11 +8,10 @@ function Root(props) {
     //componentDidMount =>
 	useEffect(() => {
         const session_key = cookies.session_key
-        const headers = {'session_key':session_key};
-        
+        const headers = {'Authorization':session_key};
+
         if (session_key === undefined){console.log("session key doesn't exist");}
         else{console.log(session_key);}
-
         axios.post('/', null,{headers:headers})
         .then(res => {
             console.log('#result: ' + JSON.stringify(res.data));

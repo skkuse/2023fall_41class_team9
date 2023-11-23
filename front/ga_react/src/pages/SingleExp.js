@@ -31,12 +31,12 @@ function SingleExp(props) {
 
     const requestExp = async () => {
         setLoading(true);
-        console.log(location.state.id);
         const session_key = cookies.session_key
         const body = {'id_list': location.state.id};
-        const headers = {'session_key':session_key};
-        console.log(session_key);
-        await axios.post('/exp', body, { headers: headers })
+        const headers = {'Authorization':session_key};
+		console.log(body);
+        console.log(headers);
+        await axios.get('/exp',{ params:body, headers: headers })
             .then(res => {
                 console.log('#result: ' + JSON.stringify(res.data));
                 setExp(res.data);
@@ -52,14 +52,14 @@ function SingleExp(props) {
 	return (
 		<div>
             {isLoading && <Loading className="loading"/>}
-			<Menubar page />
-			<div style={{ textAlign: "center", margin: "1px", fontSize: "22px" }} >Green Algorithms Home</div>
-			<div> experiment name : </div>
-			<div className='code-editor' style={divSt}>
-				<div>source code</div>
+			<Menubar/>
+			<div className='code-editor'>
+				<div className='editor-header'>
+					<div> experiment name : </div>
+				</div>
 				<div className='editor'>
 					<Editor
-						height="40vh"
+						height="65vh"
 						defaultLanguage="java"
 						defaultValue={exp.code}
 						onMount={handleEditorDidMount}
