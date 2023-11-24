@@ -1,5 +1,5 @@
-from typing import Optional, Annotated
-from fastapi import FastAPI, status, Depends, HTTPException, Header
+from typing import Optional, Annotated, List
+from fastapi import FastAPI, status, Depends, HTTPException, Header, Request, Query
 from fastapi.security import OAuth2PasswordBearer
 from CodeModel import Code
 from datetime import datetime
@@ -50,19 +50,16 @@ def read_root():
     return {"Hello": "World"}
 
 @app.post("/")
-def create_session_key(session_key: str = Header(default=None)):
-    # TODO DB에서 session_key들 가져오기
-    session_keys = []
-    if session_key not in session_keys:
-        new_session_key = str(uuid4())
-        return {"session_key": new_session_key, "status" : "200 OK"}
-    return {"session_key": session_key, "status" : "400 Bad Request"}
+def create_session_key(req: Request):
+    if "Authorization" not in req.headers:
+        session_key = str(uuid4())
+        return {"session_key": session_key, "status" : "200 OK"}
+    else:
+        return {"session_key": req.headers["Authorization"], "status" : "400 Bad Request"}
 
 @app.post("/exp")
-def post_exp(item: Item, session_key: str = Header(default=None), db: Session = Depends(get_db)):
-    session_keys = []
-    if session_key in session_keys:
-        pass
+def post_exp(item: Item, req: Request, db: Session = Depends(get_db)):
+    
     title = item.title
     code = item.code
     iteration = 1
@@ -76,35 +73,39 @@ def post_exp(item: Item, session_key: str = Header(default=None), db: Session = 
 
     car_index, plane_index, tree_index = footprint_transform(footprint)
 
-    return {"id": 1, "title": title, 
-            "run_time": run_time, "footprint":footprint,
-            "car_index":car_index, "plane_index":plane_index,
-            "tree_index": tree_index, "create_time": datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+    create_time = datetime.now()
+
+    exp = Experiment(
+        session_key = req.headers["Authorization"],
+        title = title,
+        code_path = "",
+        footprint = footprint,
+        run_time = run_time,
+        create_time = create_time
+    )
+    experiment = db_create_experiment(db, exp)
+
+    return {"id": experiment.id, "title": title, 
+            "run_time": run_time, "footprint": footprint,
+            "car_index": car_index, "plane_index":plane_index,
+            "tree_index": tree_index, "create_time": datetime.now()}
 
 @app.get("/history")
-def get_history(session_key: str = Header(default=None), db: Session = Depends(get_db)):
-    session_keys = []
-    history = []
-    if session_key not in session_keys:
-        return {"history" : history}
+def get_history(req: Request, db: Session = Depends(get_db)):
+    if "Authorization" not in req.headers:
+        return {"history":[]}
     else:
-        # history.append({
-        #     "id" : 1,
-        #     "title" : title,
-        #     "run_time" : run_time,
-        #     "footprint" : footprint,
-        #     "create_time" : create_time
-        # })
+        history = db_get_experiments(db, req.headers["Authorization"])
+    
         return {"history" : history}
     
 @app.get("/exp")
-def get_exp(list: list, session_key: str = Header(default=None), db: Session = Depends(get_db)):
-    experiments = []
-    for i in list:
-        # iteration마다 primary값이 있는지 요청
-        pass
+def get_exp(id_list: List[int] = Query(None, alias="id_list[]"), db: Session = Depends(get_db)):
+    experiments = db_query_experiments(db, id_list)
+    print(id_list)
 
     return {"experiments" : experiments}
+    # return {"experiments" : id_list}
 
 def footprint_transform(footprint):
     # TODO
