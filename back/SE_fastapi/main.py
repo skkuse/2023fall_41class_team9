@@ -10,6 +10,7 @@ from uuid import uuid4
 import re
 import requests
 import secrets
+import subprocess
 
 import psutil
 import numpy as np
@@ -120,18 +121,43 @@ def code_to_file(file_name, code):
     file_object.write(code)
     file_object.close()
 
+def execute_java_code(java_code, timeout_seconds):
+    try:
+        # 컴파일 및 실행, timeout 설정
+        result = subprocess.run(['java', 'LongRunningTask'], input=java_code.encode(), text=True, capture_output=True, check=True, timeout=timeout_seconds)
+        print("Execution successful. Output:")
+        print(result.stdout)
+    except subprocess.TimeoutExpired:
+        print(f"Timeout of {timeout_seconds} seconds exceeded. Execution terminated.")
+    except subprocess.CalledProcessError as e:
+        print("Compilation or execution error:")
+        print(e.stderr)
+
 def java_process(file_name):
     # Compile the Java code
-    subprocess.run(["javac", "file_name.java"])
+    # subprocess.run(["javac", "file_name.java"])
 
     # Run the Java program and track execution time
-    start_time = time.time()
-    process = subprocess.Popen(["java", "file_name"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-    stdout, stderr = process.communicate()
-    end_time = time.time()
-
+    start_time = 0
+    end_time = 0
+    try:
+        start_time = time.time()
+        # TODO subprocess.run 하면 컴파일 에러 뜬다.
+        # result = subprocess.run(['java', 'file_name'], text=True, capture_output=True, check=True, timeout=10)
+        process = subprocess.Popen(["java", "file_name"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        # stdout, stderr = process.communicate()
+        end_time = time.time()
+    except subprocess.TimeoutExpired:
+        start_time = 0
+        end_time = 0
+        print("Runtime Error")
+    except subprocess.CalledProcessError as e:
+        start_time = 0
+        end_time = 0
+        print("Compile Error")
     # Run time
     run_time = (end_time - start_time)
+    print(run_time)
     
     return run_time
 
