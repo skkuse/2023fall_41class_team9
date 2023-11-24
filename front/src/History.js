@@ -2,10 +2,8 @@
 import React, {useState, useEffect} from 'react';
 import ReactDOM	from 'react-dom';
 import {useNavigate, useLocation, useParams} from 'react-router-dom';
-
 import axios from 'axios';
-
-import Menubar from './Menubar'
+import Menubar from './components/Menubar.js'
 
 
 function History(props) {
@@ -68,6 +66,11 @@ function History(props) {
 		navigate('/compare', {state: {ids:ids}});
 	}
 
+	const viewSinglePage = (id) => {
+		navigate('/single', {state: {id: [id]}});
+	}
+
+	//render() =>
 	return (
 		<div>
 			<Menubar/>
@@ -93,8 +96,8 @@ function History(props) {
   					<tbody id="itbody">
 						{ expList.map(exp => (
 							<tr	align="center" key={exp.id}>
-								<td><input type="checkbox" name="check" value={exp.id} /></td>
-								<td><a onClick={() => naviToHomeDetail(exp.id)}>{exp.title}</a></td>
+								<td><input type="checkbox" id="id" name="name" /></td>
+								<td><a onClick={()=>{viewSinglePage(exp.id)}}>{exp.title}</a></td>
 								<td>{exp.footprint}</td>
 								<td>{exp.runTime}</td>
 								<td>{exp.createTime}</td>
