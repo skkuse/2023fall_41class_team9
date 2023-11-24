@@ -6,38 +6,43 @@ from datetime import datetime
 from pydantic import BaseModel
 import time
 import subprocess
-import uuid
+from uuid import uuid4
 import re
 import requests
 import secrets
 
+import psutil
+import numpy as np
+import pandas as pd
+
 app = FastAPI()
 
-model_TDP = {'A8-7680':45,'A9-9425SoC':15,'AMD7552':200,'AMDEPYC7251':120,'AMDEPYC7343':190}
-model_core = {'A8-7680':4,'A9-9425SoC':2,'AMD7552':48,'AMDEPYC7251':8,'AMDEPYC7343':16}
-location_continent = {'TW':'Asia','IL':'Asia','ZA':'Africa','CN':'Asia','KR':'Asia'}
-location_contry = {'TW':'China','IL':'Israel','ZA':'South Africa','CN':'China','KR':'Korea'}
-location_carbonIntensity = {'TW':509,'IL':558,'ZA':900.6,'CN':537.4,'KR':600}
+TDP_cpu = pd.read_csv('TDP_cpu.csv')
+TDP_cpu = TDP_cpu.rename(columns=TDP_cpu.iloc[0])
+TDP_cpu = TDP_cpu.drop(TDP_cpu.index[0])
+
+CI_aggregated = pd.read_csv('CI_aggregated.csv')
+CI_aggregated = CI_aggregated.rename(columns=CI_aggregated.iloc[0])
+CI_aggregated = CI_aggregated.drop(CI_aggregated.index[0])
+
+MODEL = 'A8-7680'
+MEMORY = {'nano':0.5, 'micro':1, 'small':2, 'medium':4}
+REGION = 'KR'
 
 class Item(BaseModel):
     title: str
     code: Optional[str] = None
 
-def generate_random_authorization():
-    return secrets.token_hex(16)
-
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
-
-# ------------------------------------------------------------
 
 @app.post("/")
 def create_session_key(session_key: str = Header(default=None)):
     # TODO DB에서 session_key들 가져오기
     session_keys = []
     if session_key not in session_keys:
-        new_session_key = generate_random_authorization()
+        new_session_key = str(uuid4())
         return {"session_key": new_session_key, "status" : "200 OK"}
     return {"session_key": session_key, "status" : "400 Bad Request"}
 
@@ -54,7 +59,8 @@ def post_exp(item: Item, session_key: str = Header(default=None)):
     code_to_file(file_name, code)
     
     run_time = java_process(file_name)
-    footprint = carbon('A8-7680', 100, 'KR', run_time)
+
+    footprint = cal_footprint(MODEL, MEMORY["micro"], REGION, run_time)
 
     car_index, plane_index, tree_index = footprint_transform(footprint)
 
@@ -79,7 +85,7 @@ def get_history(session_key: str = Header(default=None)):
         # })
         return {"history" : history}
     
-@app.get("exp")
+@app.get("/exp")
 def get_exp(list: list, session_key: str = Header(default=None)):
     experiments = []
     for i in list:
@@ -87,9 +93,9 @@ def get_exp(list: list, session_key: str = Header(default=None)):
         pass
 
     return {"experiments" : experiments}
-# ------------------------------------------------------------
 
 def footprint_transform(footprint):
+    # TODO
     car_transform = 0.1
     plane_transform = 0.2
     tree_transform = 0.3
@@ -129,16 +135,17 @@ def java_process(file_name):
     
     return run_time
 
-def carbon(model_name, memory, countryName, run_time):
-    
-    num_of_cores = model_core[model_name]
-    power_draw_for_cores = model_TDP[model_name]
-    
-    memory = 100
+def cal_footprint(model_name, memory, countryName, run_time):
+    # TDP_per_core = TDP_cpu[TDP_cpu['model']==model_name]['TDP_per_core'].values[0]
+    # number_of_cores = TDP_cpu[TDP_cpu['model']==model_name]['n_cores'].values[0]
+    power_draw_for_cores = TDP_cpu[TDP_cpu['model']==model_name]['TDP'].values[0]
+    power_draw_for_cores = float(power_draw_for_cores)
+
     power_draw_for_memory = memory*0.3725
 
-    carbon_intensity = location_carbonIntensity[countryName]
+    carbon_intensity = CI_aggregated[CI_aggregated['location']==countryName]['carbonIntensity'].values[0]
+    carbon_intensity = float(carbon_intensity)
+
+    footprint = run_time * (power_draw_for_cores*1+power_draw_for_memory)*1.2*1*carbon_intensity*0.001
     
-    carbon = run_time * (power_draw_for_cores*1+power_draw_for_memory)*1.2*1*carbon_intensity*0.001
-    
-    return carbon
+    return footprint
