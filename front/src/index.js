@@ -1,9 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-
-import axios from 'axios';
-
 import App from './app';
+import axios from 'axios';
 
 //axios.defaults.crossDomain = false;
 axios.defaults.withCredentials = true;

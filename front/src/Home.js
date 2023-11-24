@@ -1,191 +1,128 @@
-import React, {useState, useEffect} from 'react';
-import ReactDOM	from 'react-dom';
-import {useNavigate, useLocation} from 'react-router-dom';
+/*
+<a href="https://www.flaticon.com/kr/free-icon/car_7524162?term=%EC%9E%90%EB%8F%99%EC%B0%A8&page=1&position=4&origin=search&related_id=7524162" title="자동 아이콘">자동 아이콘  제작자: Talha Dogar - Flaticon</a>
+<a href="https://www.flaticon.com/kr/free-icon/co2-cloud_4343315?term=co2&page=1&position=7&origin=search&related_id=4343315" title="co2 구름 아이콘">Co2 구름 아이콘  제작자: bqlqn - Flaticon</a>
+<a href="https://www.flaticon.com/kr/free-icon/fly_4524225?k=1700635550936" title="비행기 아이콘">비행기 아이콘  제작자: surang - Flaticon</a>
+<a href="https://www.flaticon.com/kr/free-icon/tree_489969?term=%EB%82%98%EB%AC%B4&page=1&position=1&origin=search&related_id=489969" title="나무 아이콘">나무 아이콘  제작자: Freepik - Flaticon</a>
+*/
+
+
+import React, { useState, useEffect, useRef } from 'react';
+import {useCookies} from 'react-cookie'
 import axios from 'axios';
 
-import Menubar from './Menubar'
-
-//css use example
-const divSt = {marginLeft:"5px", marginRight:"5px", marginTop:"3px", marginBottom:"3px"};
+import Loading from './components/Loading.js';
+import Editor from '@monaco-editor/react';
+import Menubar from './components/Menubar.js'
+import ResultBox from './components/ResultBox.js';
+import './Home.css'
 
 function Home(props) {
-	const [tresult,setTResult] = useState(
-		{"runTime":"10","footprint":"35.23",
-		 "carIndex":"0.0002","planeIndex":"0.00007","treeIndex":"0.0004",
-		 "coreNo":"4","memory":"4"
-		} 
-	);
+	const editorRef = useRef(null);
+	const [cookies, setCookie, removeCookie] = useCookies(['session_key']);
+	const [isLoading, setLoading] = useState(false);
+	const [exp, setExp] = useState({});
 
-	const navigate = useNavigate();
-	const location = useLocation();
-	
 	//componentDidMount =>
-	useEffect(()=>{
-		console.log('component mounted!');
-		let pathName = location.pathname;
-		if (pathName == '/homeDetail') {
-			doDetail();
-		} else {
-			clear();
-		}
-	},[location])
+	useEffect(() => {
+		console.log('component mounted!')
+	}, [])
 
 	const readFile = () => {
-		let file = document.getElementById('file').files[0];
+		let file = document.getElementById('ifile').files[0];
 		let reader = new FileReader();
 		reader.readAsText(file);
-
-		reader.onload = function() {
-			console.log(reader.result);
-			var code = document.getElementById('code');
-			code.value = reader.result;
+		reader.onload = function () {
+			editorRef.current.setValue(reader.result)
 		};
-		reader.onerror = function() {
+		reader.onerror = function () {
 			console.log(reader.error);
 		};
 	}
 
-	const save = () => {
-		console.log('hi save~');
-		
-		let code = document.getElementById('code').value;
-		console.log("#code");
-		console.log(code);
-		
-		let title = document.getElementById('title').value;
-		
-		let param = {code: code, title: title};
+	const run = async () => {
+		setLoading(true);
+		const code = editorRef.current.getValue();
+		const title = document.getElementById('title').value;
+		const session_key = cookies.session_key;
+		const headers = {"Authorization": session_key}
+		const body = { 
+			"title": title,
+			"code": code
+		};
+		console.log(headers);
+		console.log(body);
+		await axios.post('/exp', body,{headers:headers})
+			.then(res => {
+				console.log('#result: ' + JSON.stringify(res.data));
+				setExp(res.data);
+			}).catch(error => {
+				alert('#save error ' + error)
+			})
 
-		axios.post('/save.do', param)
-		.then(res => {
-			console.log('#result: '+JSON.stringify(res.data));
-			
-			/*
-			실험결과
-			run time : 10
-			carbon footprint : 35.23
-			car index : 0.0002
-			plane index : 0.00007
-			tree index : 0.0002
-    	
-			서버 시스템 사양
-			Number of cores : 4
-			Memory available : 4
-			*/
-			
-			document.getElementById('runTime').innerHTML = "run time : " + res.data.runTime;
-			document.getElementById('footprint').innerHTML = "carbon footprint : " + res.data.footprint;
-			document.getElementById('carIndex').innerHTML = "car index : " + res.data.carIndex;
-			document.getElementById('planeIndex').innerHTML = "plane index : " + res.data.planeIndex;
-			document.getElementById('treeIndex').innerHTML = "tree index : " + res.data.teeIndex;
-			document.getElementById('coreNo').innerHTML = "Number of cores : " + res.data.coreNo;
-			document.getElementById('memory').innerHTML = "Memory available : " + res.data.memory;
-		}).catch(error => {
-			console.log('#save error '+error)
-		})
+		setExp({id:1,title:"123",run_time:123, car_index:1222, footprint:100, tree_index:22, plane_index:44});
+		setLoading(false);
 	}
 
-	const loadTestData = () => {
-		document.getElementById('runTime').innerHTML = "run time : " + tresult.runTime;
-		document.getElementById('footprint').innerHTML = "carbon footprint : " + tresult.footprint;
-		document.getElementById('carIndex').innerHTML = "car index : " + tresult.carIndex;
-		document.getElementById('planeIndex').innerHTML = "plane index : " + tresult.planeIndex;
-		document.getElementById('treeIndex').innerHTML = "tree index : " + tresult.treeIndex;
-		document.getElementById('coreNo').innerHTML = "Number of cores : " + tresult.coreNo;
-		document.getElementById('memory').innerHTML = "Memory available : " + tresult.memory;
-	}
+	// monaco editor handlers
+	const handleEditorValidation = (markers) => {markers.forEach((marker) => console.log('onValidate:', marker.message));}
+	const handleEditorDidMount = (editor, monaco) => {editorRef.current = editor;}
 
-	const doDetail = () => {
-		console.log('#doDetail');
-		//selectDetail();
-		loadTestData();
-		
-		document.getElementById('file').disabled = true;
-		document.getElementById('save').disabled = true;
-		document.getElementById('title').readOnly = true;
-	}	
-
-	const selectDetail = () => {
-		console.log('#selectDetail');
-		let id = location.state.id;
-		console.log('#id: '+id);
-		
-		let param = {id: id};
-
-		axios.post('/selectDetail.do', param)
-		.then(res => {
-			console.log('#result: '+JSON.stringify(res.data));
-			document.getElementById('code').innerHTML = res.data.code;
-			document.getElementById('title').value = res.data.expName;
-			document.getElementById('runTime').innerHTML = "run time : " + res.data.runTime;
-			document.getElementById('footprint').innerHTML = "carbon footprint : " + res.data.footprint;
-			document.getElementById('carIndex').innerHTML = "car index : " + res.data.carIndex;
-			document.getElementById('planeIndex').innerHTML = "plane index : " + res.data.planeIndex;
-			document.getElementById('treeIndex').innerHTML = "tree index : " + res.data.teeIndex;
-			document.getElementById('coreNo').innerHTML = "Number of cores : " + res.data.coreNo;
-			document.getElementById('memory').innerHTML = "Memory available : " + res.data.memory;
-		}).catch(error => {
-			console.log('#selectDetail error '+error)
-		})
-	}
-	
-	const clear = () => {
-		document.getElementById('code').innerHTML = '';
-		document.getElementById('title').value = '';
-		document.getElementById('runTime').innerHTML = '';
-		document.getElementById('footprint').innerHTML = '';
-		document.getElementById('carIndex').innerHTML = '';
-		document.getElementById('planeIndex').innerHTML = '';
-		document.getElementById('treeIndex').innerHTML = '';
-		document.getElementById('coreNo').innerHTML = '';
-		document.getElementById('memory').innerHTML = '';
-		
-		document.getElementById('file').disabled = false;
-		document.getElementById('save').disabled = false;
-		document.getElementById('title').readOnly = false;
-	}
-	
 	return (
 		<div>
-			<Menubar/>
-			
-			<div style={{textAlign:"center", margin:"1px", fontSize:"22px"}} >Green Algorithms Home</div> 
-
-			<div>source code</div>
-			<div>
-				<input id="file" type="file" onChange={readFile} ></input>
+			{isLoading && <Loading className="loading"/>}
+			<Menubar page={"home"} />
+			<div style={{ textAlign: "center", margin: "1px", fontSize: "22px" }} >Green Algorithms Home</div>
+			<div className='code-editor'>
+				<div className='editor-header'>
+					<div style={{flex:0}}><input id="ifile" type="file" onChange={readFile} ></input></div>
+					<div style={{flex:1}}> experiment name : <input style={{ width: "50%" }} id="title"></input> </div>
+					<button className='run-button' onClick={run}>
+						<div className='text-run'>Run</div>
+					</button>
+				</div>
+				<div className='editor'>
+					<Editor
+						height="65vh"
+						defaultLanguage="java"
+						defaultValue="// some comment"
+						onMount={handleEditorDidMount}
+						onValidate={handleEditorValidation}
+					/>
+				</div>
 			</div>
 
-			<div>
-				<textarea id="code" style={{width:"100%", height:"20vh"}} spellCheck="false"/>
-			</div>
 
-			<div>
-				experiment name : <input style={{width: "30%"}} id="title"></input>
-			</div>
-
-			<div>
-				<button id="save" onClick={loadTestData}>run and save</button>
-			</div>
-			
-			<div style={{display:"flex", border:"1px solid", height:"30vh"}} >
-				<div style={{width:"50%", border:"1px solid"}}>
+			<div className='exp' >
+				<div className='sysenv'>
 					<div>서버 시스템 사양</div>
-					<div id="coreNo"></div>
-					<div id="memory"></div>
+					<div>
+						Number of cores : 4
+					</div>
+					<div>
+						Nemory available : 4 GB
+					</div>
 				</div>
-				<div style={{width:"50%", border:"1px solid"}}>
+				<div className='result'>
+					<div className='row'>
+						<ResultBox img_src={'./img/co2.png'} title={'Carbon Footprint'} value={exp.footprint}/>
+						<ResultBox img_src={'./img/tree.png'} title={'Carbon sequestration'} value={exp.tree_index}/>
+					</div>
+					<div className='row'>
+						<ResultBox img_src={'./img/car.png'} title={'in a passenger car'} value={exp.car_index}/>
+						<ResultBox img_src={'./img/airplane.png'} title={'of a flight Korea-Japan'} value={exp.plane_index}/>
+					</div>
+					
 					<div>실험결과</div>
-					<div id="runTime"></div>
-					<div id="footprint"></div>
-					<div id="carIndex"></div>
-					<div id="planeIndex"></div>
-					<div id="treeIndex"></div>
+					<div id="runTime">run time: {exp.run_time}ms</div>
+					<div id="footprint">{exp.footprint}</div>
+					<div id="carIndex">{exp.car_index}</div>
+					<div id="planeIndex">{exp.plane_index}</div>
+					<div id="treeIndex">{exp.tree_index}</div>
 				</div>
 			</div>
-
 		</div>
 	)
 }
+
 
 export default Home;
