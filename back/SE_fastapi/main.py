@@ -11,10 +11,21 @@ import re
 import requests
 import secrets
 import subprocess
-
 import psutil
 import numpy as np
 import pandas as pd
+
+from models import Base, Experiment
+from crud import *
+from database import SessionLocal, engine
+
+Base.metadata.create_all(bind=engine)
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 app = FastAPI()
 
@@ -48,7 +59,7 @@ def create_session_key(session_key: str = Header(default=None)):
     return {"session_key": session_key, "status" : "400 Bad Request"}
 
 @app.post("/exp")
-def post_exp(item: Item, session_key: str = Header(default=None)):
+def post_exp(item: Item, session_key: str = Header(default=None), db: Session = Depends(get_db)):
     session_keys = []
     if session_key in session_keys:
         pass
@@ -71,7 +82,7 @@ def post_exp(item: Item, session_key: str = Header(default=None)):
             "tree_index": tree_index, "create_time": datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
 @app.get("/history")
-def get_history(session_key: str = Header(default=None)):
+def get_history(session_key: str = Header(default=None), db: Session = Depends(get_db)):
     session_keys = []
     history = []
     if session_key not in session_keys:
@@ -87,7 +98,7 @@ def get_history(session_key: str = Header(default=None)):
         return {"history" : history}
     
 @app.get("/exp")
-def get_exp(list: list, session_key: str = Header(default=None)):
+def get_exp(list: list, session_key: str = Header(default=None), db: Session = Depends(get_db)):
     experiments = []
     for i in list:
         # iteration마다 primary값이 있는지 요청
