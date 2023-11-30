@@ -71,11 +71,10 @@ function Home(props) {
 		<div>
 			{isLoading && <Loading className="loading"/>}
 			<Menubar page={"home"} />
-			<div style={{ textAlign: "center", margin: "1px", fontSize: "22px" }} >Green Algorithms Home</div>
 			<div className='code-editor'>
 				<div className='editor-header'>
 					<div style={{flex:0}}><input id="ifile" type="file" onChange={readFile} ></input></div>
-					<div style={{flex:1}}> experiment name : <input style={{ width: "50%" }} id="title"></input> </div>
+					<div style={{flex:1}}> Experiment name : <input style={{ width: "50%" }} id="title"></input> </div>
 					<button className='run-button' onClick={run}>
 						<div className='text-run'>Run</div>
 					</button>

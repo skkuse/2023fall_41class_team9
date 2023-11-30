@@ -1,8 +1,9 @@
 .code-editor {
-    border: 2px black solid;
-    border-radius: 20px;
-    margin: 2% 5% 2% 5%;
-    padding: 3vh;
+    border: 2px rgb(0, 0, 0) solid;
+    background-color: rgb(207, 207, 207);
+    border-radius: 50px;
+    margin: 2% 0% 2% 0%;
+    padding: 5vh;
     height: 70vh;
 }
 .editor-header {
@@ -42,13 +43,15 @@
 .exp { 
     display: flex;
     flex-direction: row;
+    justify-content: space-evenly;
     margin: 2% 5% 2% 5%;
     border: 1px solid;
     height: auto;
 }
 
 .exp .sysenv { 
-    width: 50%;
+    width: 20%;
+    height: 40vh;
     border: 1px solid;
 }
 
