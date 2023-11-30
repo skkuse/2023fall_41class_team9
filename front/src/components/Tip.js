@@ -7,8 +7,10 @@ const Tip = ({ thumbnail = "./thumbnail.png", title = "Title", contents = "abcde
     return (
         <Link className="tip" to={`/tips/${idx}`}>
             <img className="thumbnail" alt="thumbnail" src={thumbnail} />
-            <div className="title">{title}</div>
-            <div className="contents">{contents}</div>
+            <div className="right">
+                <div className="title">{title}</div>
+                <div className="contents">{contents}</div>
+            </div>
         </Link>
     );
 };
