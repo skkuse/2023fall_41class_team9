@@ -9,15 +9,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {useCookies} from 'react-cookie'
 import axios from 'axios';
-
 import Loading from './components/Loading.js';
 import Editor from '@monaco-editor/react';
 import Menubar from './components/Menubar.js'
 import ResultBox from './components/ResultBox.js';
 import SysEnv from './components/Sysenv.js';
-//import Button from 'react-bootstrap/Button';
-
-//import 'bootstrap/dist/css/bootstrap.min.css';
 import './Home.css'
 
 function Home(props) {
@@ -69,7 +65,6 @@ function Home(props) {
 	
 	const handleEditorValidation = (markers) => {markers.forEach((marker) => console.log('onValidate:', marker.message));}
 	const handleEditorDidMount = (editor, monaco) => {editorRef.current = editor;}
-
 	return (
 		<div>
 			{isLoading && <Loading className="loading"/>}
@@ -84,7 +79,7 @@ function Home(props) {
 				</div>
 				<div className='editor'>
 					<Editor
-						height="65vh"
+						height="600px"
 						defaultLanguage="java"
 						defaultValue="// some comment"
 						onMount={handleEditorDidMount}

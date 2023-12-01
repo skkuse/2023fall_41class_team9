@@ -5,8 +5,10 @@
     justify-content: flex-start;
     align-items: flex-start;
     margin: 2% 10% 2% 10%;
+    padding: 2%;
     min-height: 200px;
     height: auto;
+    width: auto;
     max-width: 1000px;
     text-decoration: none;
     
@@ -34,8 +36,9 @@
 .tip .contents {
     color: #000000;
     font-family: "Inter-Regular", Helvetica;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 400;
+    margin-top: 3%;
     height: auto;
     width: auto;
 }

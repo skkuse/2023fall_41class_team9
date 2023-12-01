@@ -31,7 +31,6 @@ function Root(props) {
             // }).catch(error => {
             //     alert('#save error ' + error)
             // })
-            console.log('component mounted!');
         }
         fetchData();
     }, [])
