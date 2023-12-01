@@ -44,7 +44,7 @@
     flex-wrap: wrap;
 }
 .each-tip-page .container .image {
-    width: 550px;
-    height: 500px;
+    width: auto;
+    height: auto;
     border: #000000 3px solid;
 }
