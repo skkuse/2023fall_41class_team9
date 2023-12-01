@@ -18,6 +18,7 @@ import pandas as pd
 from models import Base, Experiment
 from crud import *
 from database import SessionLocal, engine
+from fastapi.middleware.cors import CORSMiddleware
 
 Base.metadata.create_all(bind=engine)
 def get_db():
@@ -28,6 +29,14 @@ def get_db():
         db.close()
 
 app = FastAPI()
+origins=["*"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 TDP_cpu = pd.read_csv('TDP_cpu.csv')
 TDP_cpu = TDP_cpu.rename(columns=TDP_cpu.iloc[0])
