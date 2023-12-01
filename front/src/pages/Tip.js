@@ -14,9 +14,12 @@ function Tip() {
       <Menubar page={"tip"}/>
       <div className='container'>
         <p className='title'>{tipData[idx]['title']}</p>
-        <p className='content'>
-          {tipData[idx]['contents']}
-        </p>
+        <p className='content'>{tipData[idx]['contents'][0]}</p>
+        <div className='subsection'>
+          <img className='image'></img>
+          <img className='image'></img>
+        </div>
+        <p className='content'>{tipData[idx]['contents'][1]}</p>
       </div>
     </div>
   );

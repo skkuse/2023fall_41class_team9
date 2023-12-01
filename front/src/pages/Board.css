@@ -7,12 +7,14 @@
 
 
 .tips-page .tips-table {
-  background-color: #e7e7e7;
+  background-color: #ffffff;
   top: 200px;
-  width: 80%;
+  width: 50%;
+  max-width: 2000px;
   height: auto;
   position: absolute;
   display: flex;
   flex-direction: column;
+  align-items: center;
   border: 3px solid black;
 }
