@@ -6,11 +6,6 @@ import Tip from '../components/Tip.js';
 import tipData from './tiptest.json'
 
 class Board	extends	Component	{
-	constructor() {
-		super();
-	}
-  state =	{
-	}
 	componentDidMount()	{
 		console.log('# component did mount board');
 	}
@@ -20,7 +15,7 @@ class Board	extends	Component	{
         <Menubar page={"tips"}/>
         <div className='tips-table'>
           {tipData.map(element => {
-            return <Tip title={element.title} contents={element.contents[0]} idx={element.idx} />
+            return <Tip key={element.idx} title={element.title} contents={element.contents[0]} idx={element.idx} />
           })};
         </div>
       </div>
