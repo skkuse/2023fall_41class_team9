@@ -20,6 +20,7 @@ from models import Base, Experiment
 from crud import *
 from database import SessionLocal, engine
 from fastapi.middleware.cors import CORSMiddleware
+from pytz import timezone
 
 Base.metadata.create_all(bind=engine)
 def get_db():
@@ -94,7 +95,7 @@ def post_exp(item: Item, req: Request, db: Session = Depends(get_db)):
 
     car_index, plane_index, tree_index = transform_carbonEmissions(carbonEmissions)
 
-    created_at = datetime.now()
+    created_at = datetime.now(timezone('Asia/Seoul'))
 
     exp = Experiment(
         session_key = req.headers["Authorization"],
@@ -170,7 +171,7 @@ def find_public_class(code):
         return None
 
 def code_to_file(public_class, code:str):
-    now = datetime.now()
+    now = datetime.now(timezone('Asia/Seoul'))
     new_class_name = now.strftime('GA%Y%m%d_%H%M%S_') + str(uuid.uuid4().hex)  # uuid1은 시간기준, uuid4 랜덤
     
     file_object = open(f"java_files/{new_class_name}.java","w+")
