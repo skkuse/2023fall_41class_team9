@@ -7,11 +7,12 @@
     height: 100%;
    
 }
-
 .each-tip-page .container {
     border: black solid 3px;
     height: 100%;
-    width: 90%;
+    width: 80%;
+    max-width: 1200px;
+    margin-top: 1%;
 }
 
 .each-tip-page .container .title {
@@ -19,11 +20,12 @@
     font-family: "Inter-Bold", Helvetica;
     font-size: 36px;
     font-weight: 700;
-    line-height: normal;
     text-align: center;
-    border: #000000 3px solid;
-    height: 70px;
-    width: 100%;
+    border-bottom: green 5px solid;
+    height: auto;
+    min-height: 70px;
+    width: 98%;
+    margin: 1%;
 }
 
 .each-tip-page .container .content {
@@ -31,9 +33,18 @@
     font-family: "Inter-Regular", Helvetica;
     font-size: 24px;
     font-weight: 700;
-    line-height: normal;
     text-align: left;
     margin-left: 5%;
     margin-right: 5%;
+}
+.each-tip-page .subsection {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+.each-tip-page .container .image {
+    width: auto;
+    height: auto;
     border: #000000 3px solid;
 }
