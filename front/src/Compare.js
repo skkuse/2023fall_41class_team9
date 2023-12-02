@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import ReactDOM	from 'react-dom';
 import {useNavigate, useLocation, useParams} from 'react-router-dom';
-
+import {useCookies} from 'react-cookie'
 import axios from 'axios';
 
 import Menubar from './components/Menubar'
@@ -9,6 +9,7 @@ import Menubar from './components/Menubar'
 import { BarChart } from '@mui/x-charts/BarChart';
 
 function Compare(props) {
+	const [cookies, setCookie, removeCookie] = useCookies(['session_key']);
 	const [result1,setResult1] = useState(
 		[]
 	);
@@ -43,32 +44,47 @@ function Compare(props) {
 	const location = useLocation();
 	const ids = location.state.ids;
 
-	const compare = () => {
-		console.log('#compare~');
+	// const compare = () => {
+	// 	console.log('#compare~');
 		
-		//###
-		//let param = {ids: ids};
-		//let param = {id_list: ids};
-		//=>
-		let param = '?';
-		//ex) /exp?id_list[]=6&id_list[]=7
-		for (var i = 0; i < ids.length; i++){
-			param = param + 'id_list[]='+ids[i]+'&';
-		}
-		console.log('#ids.length: '+ids.length);
+	// 	//###
+	// 	//let param = {ids: ids};
+	// 	//let param = {id_list: ids};
+	// 	//=>
+	// 	let param = '?';
+	// 	//ex) /exp?id_list[]=6&id_list[]=7
+	// 	for (var i = 0; i < ids.length; i++){
+	// 		param = param + 'id_list[]='+ids[i]+'&';
+	// 	}
+	// 	console.log('#ids.length: '+ids.length);
 		
-		console.log('#req param: '+JSON.stringify(param));
-		//axios.post('/compare.do', param)
-		//axios.get('/exp?id_list[]=6&id_list[]=7')
-		axios.get('/exp'+param)
-		.then(res => {
-			console.log('#resp: '+JSON.stringify(res.data));
-			//processData(res.data);
-			processData(res.data.experiments);
-		}).catch(error => {
-			console.log('#axios error '+error)
-		})
-	}
+	// 	console.log('#req param: '+JSON.stringify(param));
+	// 	//axios.post('/compare.do', param)
+	// 	//axios.get('/exp?id_list[]=6&id_list[]=7')
+	// 	axios.get('/exp'+param)
+	// 	.then(res => {
+	// 		console.log('#resp: '+JSON.stringify(res.data));
+	// 		//processData(res.data);
+	// 		processData(res.data.experiments);
+	// 	}).catch(error => {
+	// 		console.log('#axios error '+error)
+	// 	})
+	// }
+
+	const compare = async () => {
+        const session_key = cookies.session_key
+        const body = {'id_list': location.state.ids};
+        const headers = {'Authorization':session_key};
+        await axios.get('/exp',{ params:body, headers: headers })
+            .then(res => {
+				console.log((res.data.experiments[0]));
+				if (res.data.error)
+					throw res.data.error;
+				processData(res.data.experiments);
+            }).catch(error => {
+                alert('#save error ' + error)
+            })
+    }
 
 	const loadTestData = () => {
 		let testData = [
