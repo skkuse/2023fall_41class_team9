@@ -28,16 +28,18 @@ function SingleExp(props) {
         requestExp();
 	}, [])
 
+	useEffect(() => {
+		if (editorRef.current)
+        	editorRef.current.setValue(exp.code);
+	}, [exp])
+
     const requestExp = async () => {
         setLoading(true);
         const session_key = cookies.session_key
         const body = {'id_list': location.state.id};
         const headers = {'Authorization':session_key};
-		console.log(body);
-        console.log(headers);
         await axios.get('/exp',{ params:body, headers: headers })
             .then(res => {
-                console.log('#result: ' + JSON.stringify(res.data));
 				console.log((res.data.experiments[0]));
                 setExp(res.data.experiments[0]);
             }).catch(error => {
@@ -52,7 +54,7 @@ function SingleExp(props) {
 	return (
 		<div>
 			{isLoading && <Loading className="loading"/>}
-			<Menubar page={"home"} />
+			<Menubar/>
 			<div className='code-editor'>
 				<div className='editor-header'>
 					<div className='expname'>{exp.title}</div>
@@ -63,6 +65,7 @@ function SingleExp(props) {
 						defaultLanguage="java"
 						defaultValue={exp.code}
 						onMount={handleEditorDidMount}
+						options={{readOnly: true}}
 					/>
 				</div>
 			</div>
