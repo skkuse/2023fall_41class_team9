@@ -227,3 +227,4 @@ Temporary Items
 
 back/SE_fastapi/java_files/*.java
 back/SE_fastapi/java_files/*.class
+back/SE_fastapi/*.db
