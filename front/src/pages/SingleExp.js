@@ -14,8 +14,7 @@ import '../Home.css'
 import { useLocation } from 'react-router-dom';
 import {useCookies} from 'react-cookie'
 import axios from 'axios';
-
-const divSt = { marginLeft: "5px", marginRight: "5px", marginTop: "3px", marginBottom: "3px" };
+import SysEnv from '../components/Sysenv.js';
 
 function SingleExp(props) {
 	const editorRef = useRef(null);
@@ -39,7 +38,8 @@ function SingleExp(props) {
         await axios.get('/exp',{ params:body, headers: headers })
             .then(res => {
                 console.log('#result: ' + JSON.stringify(res.data));
-                setExp(res.data);
+				console.log((res.data.experiments[0]));
+                setExp(res.data.experiments[0]);
             }).catch(error => {
                 alert('#save error ' + error)
             })
@@ -51,44 +51,30 @@ function SingleExp(props) {
 
 	return (
 		<div>
-            {isLoading && <Loading className="loading"/>}
-			<Menubar/>
+			{isLoading && <Loading className="loading"/>}
+			<Menubar page={"home"} />
 			<div className='code-editor'>
 				<div className='editor-header'>
-					<div> experiment name : </div>
+					<div className='expname'>{exp.title}</div>
 				</div>
 				<div className='editor'>
 					<Editor
-						height="65vh"
+						height="600px"
 						defaultLanguage="java"
 						defaultValue={exp.code}
 						onMount={handleEditorDidMount}
-                        options={{readOnly: true}}
 					/>
 				</div>
 			</div>
+
+
 			<div className='exp' >
-				<div className='sysenv'>
-					<div>서버 시스템 사양</div>
-					<div>Number of cores : 4</div>
-					<div>Nemory available : 4 GB</div>
-				</div>
+				<SysEnv/>
 				<div className='result'>
-					<div className='row'>
-						<ResultBox img_src={'./img/co2.png'} title={'Carbon Footprint'} value={exp.footprint}/>
-						<ResultBox img_src={'./img/tree.png'} title={'Carbon sequestration'} value={exp.tree_index}/>
-					</div>
-					<div className='row'>
-						<ResultBox img_src={'./img/car.png'} title={'in a passenger car'} value={exp.car_index}/>
-						<ResultBox img_src={'./img/airplane.png'} title={'of a flight Korea-Japan'} value={exp.plane_index}/>
-					</div>
-					
-					<div>실험결과</div>
-					<div id="runTime">run time: {exp.run_time}ms</div>
-					<div id="footprint">{exp.footprint}</div>
-					<div id="carIndex">{exp.car_index}</div>
-					<div id="planeIndex">{exp.plane_index}</div>
-					<div id="treeIndex">{exp.tree_index}</div>
+					<ResultBox img_src={'./img/co2.png'} title={'Carbon Footprint'} value={exp.footprint}/>
+					<ResultBox img_src={'./img/tree.png'} title={'Carbon sequestration'} value={exp.tree_index}/>
+					<ResultBox img_src={'./img/car.png'} title={'in a passenger car'} value={exp.car_index}/>
+					<ResultBox img_src={'./img/airplane.png'} title={'of a flight Korea-Japan'} value={exp.plane_index}/>
 				</div>
 			</div>
 		</div>
