@@ -5,90 +5,67 @@
 <a href="https://www.flaticon.com/kr/free-icon/tree_489969?term=%EB%82%98%EB%AC%B4&page=1&position=1&origin=search&related_id=489969" title="나무 아이콘">나무 아이콘  제작자: Freepik - Flaticon</a>
 */
 
-
 import React, { useState, useEffect, useRef } from 'react';
+import Editor from '@monaco-editor/react';
+import Menubar from '../components/Menubar.js'
+import ResultBox from '../components/ResultBox.js';
+import Loading from '../components/Loading.js';
+import '../Home.css'
+import { useLocation } from 'react-router-dom';
 import {useCookies} from 'react-cookie'
 import axios from 'axios';
-import Loading from './components/Loading.js';
-import Editor from '@monaco-editor/react';
-import Menubar from './components/Menubar.js'
-import ResultBox from './components/ResultBox.js';
-import SysEnv from './components/Sysenv.js';
-import './Home.css'
+import SysEnv from '../components/Sysenv.js';
 
-function Home(props) {
+function SingleExp(props) {
 	const editorRef = useRef(null);
-	const [cookies, setCookie, removeCookie] = useCookies(['session_key']);
-	const [isLoading, setLoading] = useState(false);
+    const [cookies, setCookie, removeCookie] = useCookies(['session_key']);
+    const [isLoading, setLoading] = useState(false);
 	const [exp, setExp] = useState({});
-
+    const location = useLocation();
 	//componentDidMount =>
 	useEffect(() => {
 		console.log('component mounted!')
+        requestExp();
 	}, [])
 
-	const readFile = () => {
-		let file = document.getElementById('ifile').files[0];
-		let reader = new FileReader();
-		reader.readAsText(file);
-		reader.onload = function () {
-			editorRef.current.setValue(reader.result)
-		};
-		reader.onerror = function () {
-			console.log(reader.error);
-		};
-	}
-
-	const run = async () => {
-		setLoading(true);
-		const code = editorRef.current.getValue();
-		const title = document.getElementById('title').value;
-		const session_key = cookies.session_key;
-		const headers = {"Authorization": session_key}
-		const body = { 
-			"title": title,
-			"code": code
-		};
-		console.log(headers);
+    const requestExp = async () => {
+        setLoading(true);
+        const session_key = cookies.session_key
+        const body = {'id_list': location.state.id};
+        const headers = {'Authorization':session_key};
 		console.log(body);
-		await axios.post('/exp', body,{headers:headers})
-			.then(res => {
-				console.log('#result: ' + JSON.stringify(res.data));
-				setExp(res.data);
-			}).catch(error => {
-				alert('#save error ' + error)
-			})
-		setLoading(false);
-	}
+        console.log(headers);
+        await axios.get('/exp',{ params:body, headers: headers })
+            .then(res => {
+                console.log('#result: ' + JSON.stringify(res.data));
+                setExp(res.data);
+            }).catch(error => {
+                alert('#save error ' + error)
+            })
+        setLoading(false);
+    }
 
 	// monaco editor handlers
-	
-	const handleEditorValidation = (markers) => {markers.forEach((marker) => console.log('onValidate:', marker.message));}
 	const handleEditorDidMount = (editor, monaco) => {editorRef.current = editor;}
+
 	return (
 		<div>
-			{isLoading && <Loading className="loading"/>}
-			<Menubar page={"home"} />
+            {isLoading && <Loading className="loading"/>}
+			<Menubar/>
 			<div className='code-editor'>
 				<div className='editor-header'>
-					<input className='input-file' id="ifile" type="file" onChange={readFile} ></input>
-					<input className='input-expname' id="title" placeholder='Experiment name'></input>
-					<button className='run-button' onClick={run}>
-						<div className='text-run'>Run</div>
-					</button>
+					<div> experiment name : </div>
 				</div>
 				<div className='editor'>
 					<Editor
-						height="600px"
+						height="65vh"
 						defaultLanguage="java"
-						defaultValue="// some comment"
+						defaultValue={exp.code}
 						onMount={handleEditorDidMount}
-						onValidate={handleEditorValidation}
+                        options={{readOnly: true}}
 					/>
 				</div>
 			</div>
-
-
 			<div className='exp' >
 				<SysEnv/>
 				<div className='result'>
@@ -103,4 +80,4 @@ function Home(props) {
 }
 
 
-export default Home;
+export default SingleExp;

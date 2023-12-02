@@ -4,7 +4,7 @@ import {useNavigate, useLocation, useParams} from 'react-router-dom';
 
 import axios from 'axios';
 
-import Menubar from './Menubar'
+import Menubar from './components/Menubar'
 
 import { BarChart } from '@mui/x-charts/BarChart';
 
