@@ -14,6 +14,7 @@ import subprocess
 import psutil
 import numpy as np
 import pandas as pd
+import uuid
 
 from models import Base, Experiment
 from crud import *
@@ -78,7 +79,7 @@ def post_exp(item: Item, req: Request, db: Session = Depends(get_db)):
     
     # java 파일 만들고 code_path 가져오기
     # TODO 중복 방지를 위한 uuid
-    code_path = code_to_file(public_class, code)
+    code_path, public_class = code_to_file(public_class, code)
 
     run_time = java_process(public_class, code_path)
     if run_time < 0:
@@ -106,7 +107,7 @@ def post_exp(item: Item, req: Request, db: Session = Depends(get_db)):
     experiment = db_create_experiment(db, exp)
 
     return {"id": experiment.id, "title": title, 
-            "run_time": run_time, "footprint": footprint,
+            "run_time": run_time, "footprint": exp.footprint,
             "car_index": car_index, "plane_index":plane_index,
             "tree_index": tree_index, "create_time": created_at}
 
@@ -145,11 +146,14 @@ def find_public_class(code):
     else:
         return None
 
-def code_to_file(public_class, code):
-    file_object = open(f"java_files/{public_class}.java","w+")
-    file_object.write(code)
+def code_to_file(public_class, code:str):
+    now = datetime.now()
+    new_class_name = now.strftime('GA%Y%m%d_%H%M%S_') + str(uuid.uuid4().hex)  # uuid1은 시간기준, uuid4 랜덤
+    
+    file_object = open(f"java_files/{new_class_name}.java","w+")
+    file_object.write(code.replace(f'public class {public_class}', f'public class {new_class_name}'))
     file_object.close()
-    return f"java_files/{public_class}.java"
+    return f"java_files/{new_class_name}.java", new_class_name
 
 def execute_java_code(java_code, timeout_seconds):
     try:
@@ -175,7 +179,7 @@ def java_process(file_name, code_path):
         try:
             start_time = time.time()
             execute_process = subprocess.run(["java", "-cp", "java_files", file_name], capture_output=True, text=True, timeout=5)
-            execute_output, execute_error = execute_process.communicate()
+            # execute_process.stdout, execute_process.stderr
             end_time = time.time()
 
             # 0 success 1 error
@@ -205,7 +209,7 @@ def calculate_carbonEmissions(model_name, memory, countryName, run_time):
     powerNeeded_CPU  = TDP_cpu[TDP_cpu['model']==model_name]['TDP'].values[0]
     carbon_intensity = CI_aggregated[CI_aggregated['location']==countryName]['carbonIntensity'].values[0]
 
-    powerNeeded_core   = float(powerNeeded_CPU + powerNeeded_GPU)
+    powerNeeded_core   = float(powerNeeded_CPU) + float(powerNeeded_GPU)
     powerNeeded_memory = PUE_used * (memory * memoryPower)
     carbonIntensity    = float(carbon_intensity)
 
