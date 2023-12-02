@@ -54,9 +54,11 @@ function Home(props) {
 		await axios.post('/exp', body,{headers:headers})
 			.then(res => {
 				console.log('#result: ' + JSON.stringify(res.data));
+				if (res.data.error)
+					throw res.data.error;
 				setExp(res.data);
 			}).catch(error => {
-				alert('#save error ' + error)
+				alert(error);
 			})
 		setLoading(false);
 	}

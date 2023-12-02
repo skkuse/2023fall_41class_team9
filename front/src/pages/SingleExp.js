@@ -41,6 +41,8 @@ function SingleExp(props) {
         await axios.get('/exp',{ params:body, headers: headers })
             .then(res => {
 				console.log((res.data.experiments[0]));
+				if (res.data.error)
+					throw res.data.error;
                 setExp(res.data.experiments[0]);
             }).catch(error => {
                 alert('#save error ' + error)

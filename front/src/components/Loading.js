@@ -1,7 +1,6 @@
 import React from "react";
 import './loading.css'
-const Loading = ({page}) => {
-    console.log(page)
+const Loading = () => {
     return (
         <div className="overlay">
             <div className="box">
