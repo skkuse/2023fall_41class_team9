@@ -4,58 +4,37 @@
     border-radius: 10px;
     box-shadow: 2px 4px 4px #00000040;
     display: flex;
-    flex-direction: row;
-    height: 150px;
-    width: 100%;
-}
-
-.ResultBox .left {
-    width: 34%;
-    margin: 1%;
-    display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    border-right: black 3px solid;
-
+    height: 150px;
+    width: 250px;
 }
 
-
-.ResultBox .right {
-    margin: 1%;
-    width: 63%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-}
-
-.ResultBox .left .icon {
-    height: 10vw;
-    width: 10vw;
-    max-width: 100px;
-    max-height: 100px;
+.ResultBox .icon {
+    height: 100px;
+    width: 100px;
 }
 
 .ResultBox .value {
     color: #000000;
     font-family: "Inter-Bold", Helvetica;
-    font-size: 20px;
+    font-size: 12px;
     font-weight: 700;
+    height: 20px;
     letter-spacing: 0;
     line-height: normal;
     text-align: center;
-    width: 100%;
-    border: 1px black solid;
+    width: 200px;
 }
 
-.ResultBox .left .title {
+.ResultBox .title {
     color: #000000;
     font-family: "Inter-Regular", Helvetica;
     font-size: 12px;
-    font-weight: 700;
-    text-align: center;
+    font-weight: 400;
     height: 25px;
-    width: 10vw;
-    max-width: 200px;
+    letter-spacing: 0;
+    line-height: normal;
+    text-align: center;
+    width: 200px;
 }

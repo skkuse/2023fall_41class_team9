@@ -46,12 +46,25 @@ function Compare(props) {
 	const compare = () => {
 		console.log('#compare~');
 		
-		let param = {ids: ids};
+		//###
+		//let param = {ids: ids};
+		//let param = {id_list: ids};
+		//=>
+		let param = '?';
+		//ex) /exp?id_list[]=6&id_list[]=7
+		for (var i = 0; i < ids.length; i++){
+			param = param + 'id_list[]='+ids[i]+'&';
+		}
+		console.log('#ids.length: '+ids.length);
+		
 		console.log('#req param: '+JSON.stringify(param));
-		axios.post('/compare.do', param)
+		//axios.post('/compare.do', param)
+		//axios.get('/exp?id_list[]=6&id_list[]=7')
+		axios.get('/exp'+param)
 		.then(res => {
-			console.log('# '+JSON.stringify(res.data));
-			processData(res.data);
+			console.log('#resp: '+JSON.stringify(res.data));
+			//processData(res.data);
+			processData(res.data.experiments);
 		}).catch(error => {
 			console.log('#axios error '+error)
 		})
@@ -59,9 +72,9 @@ function Compare(props) {
 
 	const loadTestData = () => {
 		let testData = [
-			{"expName":"그린 알고리즘 자바코드 실험 1","runTime":"12","footprint":"35.23","carIndex":"0.0004","planeIndex":"0.00007","treeIndex":"0.0004","coreNo":"4","memory":"4"},
-			{"expName":"그린 알고리즘 자바코드 실험 2","runTime":"10","footprint":"36.23","carIndex":"0.0003","planeIndex":"0.00006","treeIndex":"0.0003","coreNo":"4","memory":"4"},
-			{"expName":"그린 알고리즘 자바코드 실험 3","runTime":"15","footprint":"37.23","carIndex":"0.0005","planeIndex":"0.00008","treeIndex":"0.0005","coreNo":"4","memory":"4"},
+			{"title":"그린 알고리즘 자바코드 실험 1","run_time":"12","footprint":"35.23","carIndex":"0.0004","planeIndex":"0.00007","treeIndex":"0.0004","coreNo":"4","memory":"4"},
+			{"title":"그린 알고리즘 자바코드 실험 2","run_time":"10","footprint":"36.23","carIndex":"0.0003","planeIndex":"0.00006","treeIndex":"0.0003","coreNo":"4","memory":"4"},
+			{"title":"그린 알고리즘 자바코드 실험 3","run_time":"15","footprint":"37.23","carIndex":"0.0005","planeIndex":"0.00008","treeIndex":"0.0005","coreNo":"4","memory":"4"},
 		];
 		processData(testData)
 		
@@ -69,8 +82,8 @@ function Compare(props) {
 	const processData = (data) => {
 		console.log("#processData~");
 		setResult1(data);
-		console.log('#data length: '+data.length);
-		console.log("#runTime: "+data[0].runTime);
+		//console.log('#data length: '+data.length);
+		//console.log("#run_time: "+data[0].run_time);
 		
 		if (data.length>0) {
 			setResult1(data[0]);
@@ -87,7 +100,7 @@ function Compare(props) {
 			rtData = {};			
 			rt = [];
 
-			rt.push(parseFloat(data[i].runTime)); // rt = [10]
+			rt.push(parseFloat(data[i].run_time)); // rt = [10]
 			rtData.data = rt; //rtData = { data: [10]}
 			//console.log("#rtData: "+JSON.stringify(rtData));
 			rtList.push(rtData) //rtList = [ { data: [10]} ]
@@ -135,22 +148,22 @@ function Compare(props) {
 		
 			<div style={{textAlign:"center", margin:"10px", fontSize:"22px"}} >Green Algorithms Compare</div> 
 			
-			<div style={{display:"flex"}}>
+			<div style={{display:"flex", margin:"5px"}}>
 				{/* left side */}
-				<div style={{width:"100%"}}>
-					<div>
-					experiment name : {result1.expName}
+				<div style={{width:"100%", margin:"5px"}}>
+					<div style={{margin:"5px"}}>
+					experiment name : {result1.title}
 					</div>
 
-					<div style={{border:"1px solid", width:"100%", height:"33vh"}} >
-						<div style={{border:"1px solid"}}>
+					<div style={{border:"1px solid", width:"100%", xheight:"33vh", margin:"5px"}} >
+						{/*<div style={{border:"1px solid"}}>
 							<div>서버 시스템 사양</div>
 							<div>Number of cores : {result1.coreNo}</div>
 							<div>Memory available : {result1.memory}</div>
-						</div>
-						<div style={{border:"1px solid"}}>
+						</div>*/}
+						<div style={{border:"1px solid", margin:"5px"}}>
 							<div>실험결과</div>
-							<div>run time : {result1.runTime} </div>
+							<div>run time : {result1.run_time} </div>
 							<div>carbon footprint : {result1.footprint} </div>
 							<div>car index : {result1.carIndex} </div>
 							<div>plane index : {result1.planeIndex} </div>
@@ -160,20 +173,20 @@ function Compare(props) {
 				</div>
 			
 				{/* right side */}
-				<div style={{width:"100%"}}>
-					<div>
-					experiment name : {result2.expName}
+				<div style={{width:"100%", margin:"5px"}}>
+					<div style={{margin:"5px"}}>
+					experiment name : {result2.title}
 					</div>
 
-					<div style={{border:"1px solid", width:"100%", height:"33vh"}} >
-						<div style={{border:"1px solid"}}>
+					<div style={{border:"1px solid", width:"100%", xheight:"33vh", margin:"5px"}} >
+						{/*<div style={{border:"1px solid"}}>
 							<div>서버 시스템 사양</div>
 							<div>Number of cores : {result2.coreNo}</div>
 							<div>Memory available : {result2.memory}</div>
-							</div>
-						<div style={{border:"1px solid"}}>
+						</div>*/}
+						<div style={{border:"1px solid", margin:"5px"}}>
 							<div>실험결과</div>
-							<div>run time : {result2.runTime} </div>
+							<div>run time : {result2.run_time} </div>
 							<div>carbon footprint : {result2.footprint} </div>
 							<div>car index : {result2.carIndex} </div>
 							<div>plane index : {result2.planeIndex} </div>
@@ -184,17 +197,17 @@ function Compare(props) {
 			</div>
 			
 			{/* bar chart */}
-			<div>
+			<div style={{margin:"5px"}}>
 				<div style={{display:"flex", xborder:"1px solid", xwidth:"100%", height:"40vh"}}>
 					<div>
-					{/* sample bar chart */}		
-					<BarChart
+					{/* sample bar chart */}
+					{/*<BarChart
 						xAxis={[{ scaleType: 'band', data: ['sample'] }]}
 						yAxis={[{ label: '#' }]}
 						series={ [{ data: [11], }, { data: [7], }, { data: [8], }] }
 						width={200}
 						height={250}
-					/>
+					/>*/}
 					</div>
 					{/* runtime bar chart */}		
 					<div>				

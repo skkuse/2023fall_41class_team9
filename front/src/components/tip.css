@@ -1,44 +1,50 @@
 .tip {
-    border-bottom: rgb(21, 156, 55) 3px solid;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: flex-start;
-    margin: 2% 10% 2% 10%;
-    padding: 2%;
-    min-height: 200px;
-    height: auto;
-    width: auto;
-    max-width: 1000px;
-    text-decoration: none;
-    
+    border: #000000 3px solid;
+    position: relative;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    margin-left: 10%;
+    margin-right: 10%;
+    height: 180px;
+    width: 80%;
 }
 
 .tip .thumbnail {
     border: #000000 solid 3px;
-    min-width: 200px;
-    min-height: 200px;
-}
-
-.tip .right {
-    flex-direction: column;
+    object-fit: cover;
+    position: absolute;
+    left: 20px;
+    top: 15px;
+    height: 80%;
+    width: 12%;
 }
 
 .tip .title {
+    border: #000000 solid 3px;
     color: #000000;
     font-family: "Inter-Bold", Helvetica;
     font-size: 36px;
     font-weight: 700;
-    height: auto;
-    width: auto;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    left: 16%;
+    top: 5%;
+    height: 40%;
+    width: 80%;
 }
 
 .tip .contents {
+    border: #000000 solid 3px;
     color: #000000;
     font-family: "Inter-Regular", Helvetica;
-    font-size: 20px;
+    font-size: 24px;
     font-weight: 400;
-    margin-top: 3%;
-    height: auto;
-    width: auto;
+    letter-spacing: 0;
+    line-height: normal;
+    position: absolute;
+    left: 16%;
+    top: 50%;
+    height: 40%;
+    width: 80%;
 }
