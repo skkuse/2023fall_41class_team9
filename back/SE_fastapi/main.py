@@ -68,36 +68,47 @@ def create_session_key(req: Request):
 
 @app.post("/exp")
 def post_exp(item: Item, req: Request, db: Session = Depends(get_db)):
-    
     title = item.title
-    code = item.code
-    iteration = 1
+    code  = item.code
 
-    file_name = find_public_class(code)
-    code_to_file(file_name, code)
+    # public class name 가져오기
+    public_class = find_public_class(code)
+    if public_class == None:
+        return {"error" : "퍼블릭 클래스 없음"}
     
-    run_time = java_process(file_name)
+    # java 파일 만들고 code_path 가져오기
+    # TODO 중복 방지를 위한 uuid
+    code_path = code_to_file(public_class, code)
 
-    footprint = cal_footprint(MODEL, MEMORY["micro"], REGION, run_time)
+    run_time = java_process(public_class, code_path)
+    if run_time < 0:
+        if run_time == -1:
+            return {"error" : "컴파일 에러"}
+        if run_time == -2:
+            return {"error" : "실행 에러"}
+        if run_time == -3:
+            return {"error" : "타임 아웃"}
 
-    car_index, plane_index, tree_index = footprint_transform(footprint)
+    carbonEmissions = calculate_carbonEmissions(MODEL, MEMORY["micro"], REGION, run_time)
 
-    create_time = datetime.now()
+    car_index, plane_index, tree_index = transform_carbonEmissions(carbonEmissions)
+
+    created_at = datetime.now()
 
     exp = Experiment(
         session_key = req.headers["Authorization"],
-        title = title,
-        code_path = "",
-        footprint = footprint,
-        run_time = run_time,
-        create_time = create_time
+        title       = title,
+        code_path   = code_path,
+        footprint   = carbonEmissions,
+        run_time    = run_time,
+        create_time = created_at
     )
     experiment = db_create_experiment(db, exp)
 
     return {"id": experiment.id, "title": title, 
             "run_time": run_time, "footprint": footprint,
             "car_index": car_index, "plane_index":plane_index,
-            "tree_index": tree_index, "create_time": datetime.now()}
+            "tree_index": tree_index, "create_time": created_at}
 
 @app.get("/history")
 def get_history(req: Request, db: Session = Depends(get_db)):
@@ -111,20 +122,17 @@ def get_history(req: Request, db: Session = Depends(get_db)):
 @app.get("/exp")
 def get_exp(id_list: List[int] = Query(None, alias="id_list[]"), db: Session = Depends(get_db)):
     experiments = db_query_experiments(db, id_list)
-    print(id_list)
 
     return {"experiments" : experiments}
-    # return {"experiments" : id_list}
 
-def footprint_transform(footprint):
-    # TODO
-    car_transform = 0.1
-    plane_transform = 0.2
-    tree_transform = 0.3
+def transform_carbonEmissions(carbonEmissions):
+    passengerCar_EU_perkm = 175
+    flight_NY_SF = 570000
+    treeYear = 11000
 
-    car_index = footprint * car_transform
-    plane_index = footprint * plane_transform
-    tree_index = footprint * tree_transform
+    car_index = carbonEmissions / passengerCar_EU_perkm
+    plane_index = carbonEmissions / flight_NY_SF
+    tree_index = carbonEmissions / treeYear * 12
 
     return car_index, plane_index, tree_index
     
@@ -137,10 +145,11 @@ def find_public_class(code):
     else:
         return None
 
-def code_to_file(file_name, code):
-    file_object = open(f"java_files/{file_name}.java","w+")
+def code_to_file(public_class, code):
+    file_object = open(f"java_files/{public_class}.java","w+")
     file_object.write(code)
     file_object.close()
+    return f"java_files/{public_class}.java"
 
 def execute_java_code(java_code, timeout_seconds):
     try:
@@ -154,45 +163,55 @@ def execute_java_code(java_code, timeout_seconds):
         print("Compilation or execution error:")
         print(e.stderr)
 
-def java_process(file_name):
-    # Compile the Java code
-    # subprocess.run(["javac", "file_name.java"])
+def java_process(file_name, code_path):
+    # 컴파일
+    process = subprocess.Popen(["javac", code_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    compile_output, compile_error = process.communicate()
 
-    # Run the Java program and track execution time
-    start_time = 0
-    end_time = 0
-    try:
-        start_time = time.time()
-        # TODO subprocess.run 하면 컴파일 에러 뜬다.
-        # result = subprocess.run(['java', 'file_name'], text=True, capture_output=True, check=True, timeout=10)
-        process = subprocess.Popen(["java", "file_name"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        # stdout, stderr = process.communicate()
-        end_time = time.time()
-    except subprocess.TimeoutExpired:
-        start_time = 0
-        end_time = 0
-        print("Runtime Error")
-    except subprocess.CalledProcessError as e:
-        start_time = 0
-        end_time = 0
-        print("Compile Error")
-    # Run time
-    run_time = (end_time - start_time)
-    print(run_time)
+    # 0 success 1 error
+    compile_return_code = process.returncode
     
-    return run_time
+    if compile_return_code == 0:
+        try:
+            start_time = time.time()
+            execute_process = subprocess.run(["java", "-cp", "java_files", file_name], capture_output=True, text=True, timeout=5)
+            execute_output, execute_error = execute_process.communicate()
+            end_time = time.time()
 
-def cal_footprint(model_name, memory, countryName, run_time):
-    # TDP_per_core = TDP_cpu[TDP_cpu['model']==model_name]['TDP_per_core'].values[0]
-    # number_of_cores = TDP_cpu[TDP_cpu['model']==model_name]['n_cores'].values[0]
-    power_draw_for_cores = TDP_cpu[TDP_cpu['model']==model_name]['TDP'].values[0]
-    power_draw_for_cores = float(power_draw_for_cores)
+            # 0 success 1 error
+            execute_return_code = execute_process.returncode
 
-    power_draw_for_memory = memory*0.3725
+            if execute_return_code == 0:
+                return end_time - start_time
+            else:
+                # 실행 에러
+                print("실행 에러")
+                return -2
+        except subprocess.TimeoutExpired as e:
+            print("10초 경과!")
+            print(e.stderr)
+            return -3
+    else:
+        # 컴파일 에러
+        print("컴파일 에러")
+        return -1
 
+def calculate_carbonEmissions(model_name, memory, countryName, run_time):
+    PUE_used = 1
+    PSF_used = 1.2
+    memoryPower = 0.3725
+    powerNeeded_GPU = 0
+
+    powerNeeded_CPU  = TDP_cpu[TDP_cpu['model']==model_name]['TDP'].values[0]
     carbon_intensity = CI_aggregated[CI_aggregated['location']==countryName]['carbonIntensity'].values[0]
-    carbon_intensity = float(carbon_intensity)
 
-    footprint = run_time * (power_draw_for_cores*1+power_draw_for_memory)*1.2*1*carbon_intensity*0.001
+    powerNeeded_core   = float(powerNeeded_CPU + powerNeeded_GPU)
+    powerNeeded_memory = PUE_used * (memory * memoryPower)
+    carbonIntensity    = float(carbon_intensity)
+
+    powerNeeded  = powerNeeded_core + powerNeeded_memory
+    energyNeeded = run_time * powerNeeded * PSF_used * 0.001
     
-    return footprint
+    carbonEmissions = energyNeeded * carbonIntensity
+
+    return carbonEmissions
