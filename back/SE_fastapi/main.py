@@ -1,5 +1,5 @@
 from typing import Optional, Annotated, List
-from fastapi import FastAPI, status, Depends, HTTPException, Header, Request, Query
+from fastapi import FastAPI, status, Depends, HTTPException, Header, Request, Query, Response
 from fastapi.security import OAuth2PasswordBearer
 from CodeModel import Code
 from datetime import datetime
@@ -121,10 +121,33 @@ def get_history(req: Request, db: Session = Depends(get_db)):
         return {"history" : history}
     
 @app.get("/exp")
-def get_exp(id_list: List[int] = Query(None, alias="id_list[]"), db: Session = Depends(get_db)):
+def get_exp(req: Request, resp: Response, id_list: List[int] = Query(None, alias="id_list[]"), db: Session = Depends(get_db)):
+    if "Authorization" not in req.headers:
+        resp.status_code = status.HTTP_401_UNAUTHORIZED
+        return {"experiments":[], "message" : "header에 Authorization 필드가 비어 있습니다."}
+    session_key = req.headers["Authorization"]
+    result = []
     experiments = db_query_experiments(db, id_list)
+    for e in experiments:
+        if e.session_key != session_key:
+            resp.status_code = status.HTTP_400_BAD_REQUEST
+            return {"experiments":[], "message" : "유효하지 않은 exp_id입니다."}
+        exp = {'id' : e.id, 
+               'session_key': session_key, 
+               'title' : e.title, 
+               'footprint' :e.footprint, 
+               'run_time' : e.run_time, 
+               'create_time' : e.create_time}
+        car_index, plane_index, tree_index = transform_carbonEmissions(float(e.footprint))
+        exp['car_index'] = car_index
+        exp['plane_index'] = plane_index
+        exp['tree_index'] = tree_index
+        with open(e.code_path, 'r') as file:
+            exp['code'] = file.read()
+        result.append(exp)
+        
 
-    return {"experiments" : experiments}
+    return {"experiments" : result}
 
 def transform_carbonEmissions(carbonEmissions):
     passengerCar_EU_perkm = 175
