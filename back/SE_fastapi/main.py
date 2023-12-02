@@ -78,6 +78,10 @@ def post_exp(item: Item, req: Request, db: Session = Depends(get_db)):
     if public_class == None:
         return {"error" : "퍼블릭 클래스 없음"}
     
+    # Title이 비어있는 경우 임의로 부여
+    if title == '':
+        title = datetime.now(timezone('Asia/Seoul')).strftime('GA%Y%m%d_%H:%M:%S_') + public_class
+    
     # java 파일 만들고 code_path 가져오기
     # TODO 중복 방지를 위한 uuid
     code_path, public_class = code_to_file(public_class, code)
