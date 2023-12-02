@@ -224,3 +224,5 @@ Temporary Items
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/django,macos,visualstudiocode
+
+back/SE_fastapi/java_files/*.java
