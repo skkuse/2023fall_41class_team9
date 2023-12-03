@@ -15,7 +15,14 @@
     font-size: 30px;
     font-weight: 1000;
     text-align: center;
-    border: 1px black solid;
+    /* border: 1px black solid; */
+}
+.SysEnv .subsection {
+    border: 2px solid black;
+    margin-top: auto;
+    margin-bottom: auto;
+    padding: 3%;
+    padding-top: 1%;
 }
 
 .SysEnv .subtitle {
@@ -23,17 +30,40 @@
     color: #000000;
     font-family: "Inter-Bold", Helvetica;
     font-size: 24px;
-    font-weight: 500;
+    font-weight: 600;
     text-align: center;
-    border: 1px solid black;
+    border-bottom: 1px solid black;
 }
 
 .SysEnv .row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
     margin-top: 5px;
+}
+
+.SysEnv .subsubtitle {
+    flex: 1;
     color: #000000;
-    background-color: white;
+    font-family: "Inter-Bold", Helvetica;
+    font-size: 22px;
+    font-weight: 400;
+    height: auto;
+    /* border: 1px solid black; */
+    width: auto;
+    margin-right: 3%;
+}
+
+.SysEnv .content {
+    flex: 1;
+    color: #000000;
     font-family: "Inter-Bold", Helvetica;
     font-size: 20px;
     font-weight: 400;
+    height: auto;
+    width: auto;
+    background-color: white;
     border: 1px solid black;
 }
+

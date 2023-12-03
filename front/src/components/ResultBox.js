@@ -9,7 +9,7 @@ const ResultBox = ({ img_src, title, value }) => {
                 <div className="title">{title}</div>
             </div>
             <div className="right">
-                <div className="value">{value}mg</div>
+                <div className="value">{value}</div>
             </div>
         </div>
     );

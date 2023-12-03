@@ -1,10 +1,5 @@
 .code-editor {
-    /* border: 2px rgb(0, 0, 0) solid; */
-    /* background-image: linear-gradient(45deg, rgba(0, 128, 0, 0.5), rgba(21, 255, 0, 0.74)); */
-    /* border-radius: 50px; */
-    margin: 0% 0% 2% 0%;
-    padding: 5vh;
-    height: 700px;
+    margin: 2% 5% 5% 5%;
 }
 .editor-header {
     border: 2px solid black;
@@ -64,28 +59,15 @@
     flex-direction: row;
     justify-content: space-evenly;
     margin: 2% 5% 2% 5%;
-    border: 1px solid;
+    /* border: 1px solid; */
     height: auto;
+    min-width: 750px;
 }
-
-/* .exp .sysenv { 
-    width: 20%;
-    height: 40vh;
-    border: 1px solid;
-} */
 
 .exp .result{ 
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     width: 50%;
-    min-height: 700px;
+    min-height: 900px;
 }
-/* .exp .result .row {
-    margin-top: 1%;
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    justify-content: space-evenly;
-} */
-

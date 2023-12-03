@@ -20,7 +20,6 @@
 
 }
 
-
 .ResultBox .right {
     margin: 1%;
     width: 63%;
@@ -31,8 +30,8 @@
 }
 
 .ResultBox .left .icon {
-    height: 10vw;
-    width: 10vw;
+    height: auto;
+    width: auto;
     max-width: 100px;
     max-height: 100px;
 }
@@ -52,10 +51,10 @@
 .ResultBox .left .title {
     color: #000000;
     font-family: "Inter-Regular", Helvetica;
-    font-size: 12px;
+    font-size: auto;
     font-weight: 700;
     text-align: center;
     height: 25px;
-    width: 10vw;
+    width: auto;
     max-width: 200px;
 }

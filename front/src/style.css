@@ -8,14 +8,3 @@ body{
 
 select{resize:auto; height:25px}
 
-/* table */
-.table tr td {
-  padding: 5px;
-  line-height: 1.42857143;
-  vertical-align: top;
-  border-bottom: 1px solid #ddd;
-  border-right:1px solid #ebebeb;
-}
-
-.table tr td:first-child {border-left:1px solid #ebebeb;}
-.table tr:first-child td {border-top:1px solid #ddd;}

@@ -3,6 +3,7 @@
 <a href="https://www.flaticon.com/kr/free-icon/co2-cloud_4343315?term=co2&page=1&position=7&origin=search&related_id=4343315" title="co2 구름 아이콘">Co2 구름 아이콘  제작자: bqlqn - Flaticon</a>
 <a href="https://www.flaticon.com/kr/free-icon/fly_4524225?k=1700635550936" title="비행기 아이콘">비행기 아이콘  제작자: surang - Flaticon</a>
 <a href="https://www.flaticon.com/kr/free-icon/tree_489969?term=%EB%82%98%EB%AC%B4&page=1&position=1&origin=search&related_id=489969" title="나무 아이콘">나무 아이콘  제작자: Freepik - Flaticon</a>
+<a href="https://www.flaticon.com/free-icon/code_8297338?term=run+time&page=1&position=10&origin=search&related_id=8297338" title="code icons">Code icons created by juicy_fish - Flaticon</a>
 */
 
 
@@ -81,7 +82,7 @@ function Home(props) {
 				</div>
 				<div className='editor'>
 					<Editor
-						height="600px"
+						height="700px"
 						defaultLanguage="java"
 						defaultValue="// some comment"
 						onMount={handleEditorDidMount}
@@ -94,6 +95,7 @@ function Home(props) {
 			<div className='exp' >
 				<SysEnv/>
 				<div className='result'>
+					<ResultBox img_src={'./img/runtime.png'} title={'Run Time'} value={exp.run_time}/>
 					<ResultBox img_src={'./img/co2.png'} title={'Carbon Footprint'} value={exp.footprint}/>
 					<ResultBox img_src={'./img/tree.png'} title={'Carbon sequestration'} value={exp.tree_index}/>
 					<ResultBox img_src={'./img/car.png'} title={'in a passenger car'} value={exp.car_index}/>
