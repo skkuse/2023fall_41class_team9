@@ -63,7 +63,7 @@ function SingleExp(props) {
 				</div>
 				<div className='editor'>
 					<Editor
-						height="600px"
+						height="700px"
 						defaultLanguage="java"
 						defaultValue={exp.code}
 						onMount={handleEditorDidMount}
@@ -76,6 +76,7 @@ function SingleExp(props) {
 			<div className='exp' >
 				<SysEnv/>
 				<div className='result'>
+				<ResultBox img_src={'./img/runtime.png'} title={'Run Time'} value={exp.run_time}/>
 					<ResultBox img_src={'./img/co2.png'} title={'Carbon Footprint'} value={exp.footprint}/>
 					<ResultBox img_src={'./img/tree.png'} title={'Carbon sequestration'} value={exp.tree_index}/>
 					<ResultBox img_src={'./img/car.png'} title={'in a passenger car'} value={exp.car_index}/>

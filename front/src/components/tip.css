@@ -1,11 +1,11 @@
 .tip {
     border-bottom: rgb(21, 156, 55) 3px solid;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
     margin: 2% 10% 2% 10%;
-    padding: 2%;
+    padding-bottom: 2%;
     min-height: 200px;
     height: auto;
     width: auto;
@@ -14,21 +14,20 @@
     
 }
 
-.tip .thumbnail {
+.tip .text-box {
     border: #000000 solid 3px;
-    min-width: 200px;
-    min-height: 200px;
-}
-
-.tip .right {
-    flex-direction: column;
+    border-radius: 30px;
+    background-color: white;
+    padding: 2%;
+    box-shadow: 2px 4px 4px #00000040;
 }
 
 .tip .title {
     color: #000000;
     font-family: "Inter-Bold", Helvetica;
-    font-size: 36px;
+    font-size: 34px;
     font-weight: 700;
+    text-align: center;
     height: auto;
     width: auto;
 }

@@ -8,20 +8,35 @@ const SysEnv = () => {
 
             <div className="subsection">
                 <div className="subtitle">CPUs</div>
-                <div className="row">Number of cores</div>
-                <div className="row">Model</div>
+                <div className="row">
+                    <div className="subsubtitle">Number of cores</div>
+                    <div className="content">4</div>
+                </div>
+                <div className="row">
+                    <div className="subsubtitle">Model</div>
+                    <div className="content">4</div>
+                </div>
             </div>
             <div className="subsection">
                 <div className="subtitle">Memory</div>
-                <div className="row">Memory available</div>
+                <div className="row">
+                    <div className="subsubtitle">Memory available</div>
+                    <div className="content">4</div>
+                </div>
             </div>
             <div className="subsection">
                 <div className="subtitle">Cloud computing</div>
-                <div className="row">Amazon Web Services</div>
+                <div className="row">
+                    <div className="subsubtitle">Cloud computing</div>
+                    <div className="content">Amazon Web Services</div>
+                </div>
             </div>
             <div className="subsection">
                 <div className="subtitle">Location</div>
-                <div className="row">Korea</div>
+                <div className="row">
+                    <div className="subsubtitle">Cloud computing</div>
+                    <div className="content">Korea</div>
+                </div>
             </div>
         </div>
     );

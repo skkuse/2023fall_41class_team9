@@ -5,6 +5,7 @@ import {useNavigate, useLocation, useParams} from 'react-router-dom';
 import axios from 'axios';
 import Menubar from './components/Menubar.js'
 
+import './History.css'
 
 //###
 import {useCookies} from 'react-cookie';
@@ -86,41 +87,42 @@ function History(props) {
 	//render() =>
 	return (
 		<div>
-			<Menubar/>
-
-			<div style={{textAlign:"center", margin:"1px", fontSize:"22px"}} >Green Algorithms History</div>
+			<Menubar page={"history"}/>
+			{/* <div style={{textAlign:"center", margin:"1px", fontSize:"22px"}} >Green Algorithms History</div> */}
 			<br/>
+			<div className='history-page'>
+				<div align="right">
+					<button style={{ fontSize: "15px", marginRight: "10px" }} onClick={compare} >compare</button>
+				</div>
 
-			<div align="right">
-				<button style={{fontSize:"15px", marginRight:"10px"}} onClick={compare} >compare</button>
-			</div>
-
-  			<div>
-  				<table className="table" style={{width:"100%"}}>
-  					<thead>
-  					<tr align="center">
-  						<td width="10%">체크</td>
-  						<td width="30%">Experiment Name</td>
-  						<td width="10%">탄소배출량</td>
-  						<td width="20%">런타임</td>
-  						<td width="20%">Create Time</td>
-  					</tr>
-  					</thead>
-  					<tbody id="itbody">
-						{ expList.map(exp => (
-							<tr	align="center" key={exp.id}>
-								{/*<td><input type="checkbox" id="id" name="name" /></td>*/}
-								<td><input type="checkbox" id="id" name="check" value={exp.id}/></td>
-								<td><a onClick={()=>{viewSinglePage(exp.id)}}>{exp.title}</a></td>
-								<td>{exp.footprint}</td>
-								<td>{exp.run_time}</td>
-								<td>{exp.create_time.substr(0,19)}</td>
+				<div>
+					<table className="table" style={{ width: "100%" }}>
+						<thead>
+							<tr align="center">
+								<td width="10%">체크</td>
+								<td width="30%">Experiment Name</td>
+								<td width="10%">탄소배출량</td>
+								<td width="20%">런타임</td>
+								<td width="20%">Create Time</td>
 							</tr>
-						))
-						}
-  					</tbody>
-  				</table>
-  			</div>
+						</thead>
+						<tbody id="itbody">
+							{expList.map(exp => (
+								<tr align="center" key={exp.id}>
+									{/*<td><input type="checkbox" id="id" name="name" /></td>*/}
+									<td><input type="checkbox" id="id" name="check" value={exp.id} /></td>
+									<td><a style={{ textDecorationLine: "underline" }} onClick={() => { viewSinglePage(exp.id) }}>{exp.title}</a></td>
+									<td>{exp.footprint}</td>
+									<td>{exp.run_time}</td>
+									<td>{exp.create_time.substr(0, 19)}</td>
+								</tr>
+							))
+							}
+						</tbody>
+					</table>
+				</div>
+			</div>
+			
 		</div>
 	)
 }
