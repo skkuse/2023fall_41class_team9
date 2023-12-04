@@ -3,7 +3,7 @@ import {Component} from 'react'
 import { BrowserRouter, Routes, Route }	from 'react-router-dom'
 import {CookiesProvider} from 'react-cookie'
 
-import Home	from './Home'
+import Home	from './pages/Home'
 import History	from './History'
 import Board from './pages/Board.js'
 import Tip from './pages/Tip.js'

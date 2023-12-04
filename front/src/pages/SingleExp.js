@@ -5,16 +5,17 @@
 <a href="https://www.flaticon.com/kr/free-icon/tree_489969?term=%EB%82%98%EB%AC%B4&page=1&position=1&origin=search&related_id=489969" title="나무 아이콘">나무 아이콘  제작자: Freepik - Flaticon</a>
 */
 
+import axios from 'axios';
 import React, { useState, useEffect, useRef } from 'react';
+import {useLocation} from 'react-router-dom';
+import {useCookies} from 'react-cookie'
+
 import Editor from '@monaco-editor/react';
 import Menubar from '../components/Menubar.js'
 import ResultBox from '../components/ResultBox.js';
 import Loading from '../components/Loading.js';
-import '../Home.css'
-import { useLocation } from 'react-router-dom';
-import {useCookies} from 'react-cookie'
-import axios from 'axios';
-import SysEnv from '../components/Sysenv.js';
+import SysEnv from '../components/SysEnv.js';
+import './Home.css'
 
 function SingleExp(props) {
 	const editorRef = useRef(null);
@@ -45,7 +46,7 @@ function SingleExp(props) {
 					throw res.data.error;
                 setExp(res.data.experiments[0]);
             }).catch(error => {
-                alert('#save error ' + error)
+                alert(error)
             })
         setLoading(false);
     }
@@ -72,11 +73,10 @@ function SingleExp(props) {
 				</div>
 			</div>
 
-
 			<div className='exp' >
 				<SysEnv/>
 				<div className='result'>
-				<ResultBox img_src={'./img/runtime.png'} title={'Run Time'} value={exp.run_time}/>
+					<ResultBox img_src={'./img/runtime.png'} title={'Run Time'} value={exp.run_time}/>
 					<ResultBox img_src={'./img/co2.png'} title={'Carbon Footprint'} value={exp.footprint}/>
 					<ResultBox img_src={'./img/tree.png'} title={'Carbon sequestration'} value={exp.tree_index}/>
 					<ResultBox img_src={'./img/car.png'} title={'in a passenger car'} value={exp.car_index}/>

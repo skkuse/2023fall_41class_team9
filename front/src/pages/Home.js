@@ -10,11 +10,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {useCookies} from 'react-cookie'
 import axios from 'axios';
-import Loading from './components/Loading.js';
 import Editor from '@monaco-editor/react';
-import Menubar from './components/Menubar.js'
-import ResultBox from './components/ResultBox.js';
-import SysEnv from './components/Sysenv.js';
+import Loading from '../components/Loading.js';
+import Menubar from '../components/Menubar.js'
+import ResultBox from '../components/ResultBox.js';
+import SysEnv from '../components/SysEnv.js';
 import './Home.css'
 
 function Home(props) {
@@ -95,8 +95,8 @@ function Home(props) {
 			<div className='exp' >
 				<SysEnv/>
 				<div className='result'>
-					<ResultBox img_src={'./img/runtime.png'} title={'Run Time'} value={exp.run_time}/>
-					<ResultBox img_src={'./img/co2.png'} title={'Carbon Footprint'} value={exp.footprint}/>
+					<ResultBox img_src={'./img/runtime.png'} title={'Run Time'} value={exp.run_time} unit={"sec"}/>
+					<ResultBox img_src={'./img/co2.png'} title={'Carbon Footprint'} value={exp.footprint} unit={"mg"}/>
 					<ResultBox img_src={'./img/tree.png'} title={'Carbon sequestration'} value={exp.tree_index}/>
 					<ResultBox img_src={'./img/car.png'} title={'in a passenger car'} value={exp.car_index}/>
 					<ResultBox img_src={'./img/airplane.png'} title={'of a flight Korea-Japan'} value={exp.plane_index}/>
