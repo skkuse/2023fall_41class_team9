@@ -1,10 +1,12 @@
 import React, {useState, useEffect} from 'react';
+import { useNavigate } from 'react-router-dom';
 import {useCookies} from 'react-cookie'
 import axios from 'axios';
 import Menubar from '../components/Menubar.js'
 
 function Root(props) {
     const [cookies, setCookie, removeCookie] = useCookies(['session_key']);
+    const naviagte = useNavigate();
     //componentDidMount =>
     useEffect(() => {
         const fetchData = async () => {
@@ -28,6 +30,7 @@ function Root(props) {
             .then(res => {
                 console.log('#result: ' + JSON.stringify(res.data));
                 setCookie('session_key', res.data.session_key);
+                naviagte('/home')
             }).catch(error => {
                 alert('#save error ' + error)
             })
