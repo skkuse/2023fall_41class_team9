@@ -2,7 +2,7 @@ import './Board.css'
 import React from 'react';
 import {Component} from 'react'
 import Menubar from '../components/Menubar.js'
-import Tip from '../components/Tip.js';
+import Tip from '../components/TipBox.js';
 import tipData from './tiptest.json'
 
 class Board	extends	Component	{

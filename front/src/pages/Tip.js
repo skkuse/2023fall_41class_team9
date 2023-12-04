@@ -1,9 +1,8 @@
 import React from 'react';
-import { Component } from 'react';
-import Menubar from '../components/Menubar';
 import { useParams } from 'react-router-dom';
-import './Tip.css'
+import Menubar from '../components/Menubar';
 import tipData from './tiptest.json'
+import './Tip.css'
 
 function Tip() {
   let { idx } = useParams();

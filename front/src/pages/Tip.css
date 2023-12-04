@@ -44,6 +44,8 @@
     flex-wrap: wrap;
 }
 .each-tip-page .container .image {
+    
+    max-width: 80%;
     width: auto;
     height: auto;
     border: #000000 3px solid;
