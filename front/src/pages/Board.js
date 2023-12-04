@@ -3,7 +3,7 @@ import React from 'react';
 import {Component} from 'react'
 import Menubar from '../components/Menubar.js'
 import Tip from '../components/TipBox.js';
-import tipData from './tiptest.json'
+import tipData from './tips.json'
 
 class Board	extends	Component	{
 	componentDidMount()	{

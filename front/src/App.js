@@ -4,11 +4,11 @@ import { BrowserRouter, Routes, Route }	from 'react-router-dom'
 import {CookiesProvider} from 'react-cookie'
 
 import Home	from './pages/Home'
-import History	from './History'
+import History	from './pages/History.js'
 import Board from './pages/Board.js'
 import Tip from './pages/Tip.js'
 import Root from './pages/Root.js'
-import Compare	from './Compare'
+import Compare	from './pages/Compare.js'
 import SingleExp from './pages/SingleExp.js'
 
 import './style.css'

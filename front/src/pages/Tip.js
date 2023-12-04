@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import Menubar from '../components/Menubar';
-import tipData from './tiptest.json'
+import tipData from './tips.json'
 import './Tip.css'
 
 function Tip() {
