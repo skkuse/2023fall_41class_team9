@@ -33,6 +33,14 @@ function Compare(props) {
 	const [ciSer,setCiSer] = useState(
 		[]
 	); 
+	//plane index bar chart 추가
+	const [piSer,setPiSer] = useState(
+		[]
+	); 
+	//tree index bar chart 추가
+	const [tiSer,setTiSer] = useState(
+		[]
+	); 
 
 	useEffect(()=>{
 		console.log('component mounted!');
@@ -77,6 +85,7 @@ function Compare(props) {
         const headers = {'Authorization':session_key};
         await axios.get('/exp',{ params:body, headers: headers })
             .then(res => {
+				console.log('#resp: '+JSON.stringify(res.data));
 				console.log((res.data.experiments[0]));
 				if (res.data.error)
 					throw res.data.error;
@@ -88,9 +97,9 @@ function Compare(props) {
 
 	const loadTestData = () => {
 		let testData = [
-			{"title":"그린 알고리즘 자바코드 실험 1","run_time":"12","footprint":"35.23","carIndex":"0.0004","planeIndex":"0.00007","treeIndex":"0.0004","coreNo":"4","memory":"4"},
-			{"title":"그린 알고리즘 자바코드 실험 2","run_time":"10","footprint":"36.23","carIndex":"0.0003","planeIndex":"0.00006","treeIndex":"0.0003","coreNo":"4","memory":"4"},
-			{"title":"그린 알고리즘 자바코드 실험 3","run_time":"15","footprint":"37.23","carIndex":"0.0005","planeIndex":"0.00008","treeIndex":"0.0005","coreNo":"4","memory":"4"},
+			{"title":"그린 알고리즘 자바코드 실험 1","run_time":"12","footprint":"35.23","car_index":"0.0004","plane_index":"0.00007","tree_index":"0.0004","coreNo":"4","memory":"4"},
+			{"title":"그린 알고리즘 자바코드 실험 2","run_time":"10","footprint":"36.23","car_index":"0.0003","plane_index":"0.00006","tree_index":"0.0003","coreNo":"4","memory":"4"},
+			{"title":"그린 알고리즘 자바코드 실험 3","run_time":"15","footprint":"37.23","car_index":"0.0005","plane_index":"0.00008","tree_index":"0.0005","coreNo":"4","memory":"4"},
 		];
 		processData(testData)
 		
@@ -147,13 +156,44 @@ function Compare(props) {
 			ciData = {};			
 			ci = [];
 
-			ci.push(parseFloat(data[i].carIndex));
+			ci.push(parseFloat(data[i].car_index));
 			ciData.data = ci;
 			//console.log("#ciData: "+JSON.stringify(ciData)+', '+data[i].carIndex);
 			ciList.push(ciData)
 		}
 		console.log("#ciList: "+JSON.stringify(ciList));
 		setCiSer(ciList)
+
+		//plane index bar chart data 처리 추가
+		let piList = [];
+		let piData = {};
+		let pi = [];
+		for(var i=0; i<data.length; i++) {
+			piData = {};			
+			pi = [];
+
+			pi.push(parseFloat(data[i].plane_index));
+			piData.data = pi;
+			piList.push(piData)
+		}
+		console.log("#piList: "+JSON.stringify(piList));
+		setPiSer(piList)
+
+		//tree index bar chart data 처리 추가 
+		let tiList = [];
+		let tiData = {};
+		let ti = [];
+		for(var i=0; i<data.length; i++) {
+			tiData = {};			
+			ti = [];
+
+			ti.push(parseFloat(data[i].tree_index));
+			tiData.data = ti;
+			tiList.push(tiData)
+		}
+		console.log("#tiList: "+JSON.stringify(tiList));
+		setTiSer(tiList)
+
 	}
 	
 
@@ -181,9 +221,9 @@ function Compare(props) {
 							<div>실험결과</div>
 							<div>run time : {result1.run_time} </div>
 							<div>carbon footprint : {result1.footprint} </div>
-							<div>car index : {result1.carIndex} </div>
-							<div>plane index : {result1.planeIndex} </div>
-							<div>tree index : {result1.treeIndex} </div>
+							<div>car index : {result1.car_index} </div>
+							<div>plane index : {result1.plane_index} </div>
+							<div>tree index : {result1.tree_index} </div>
 						</div>
 					</div>
 				</div>
@@ -204,9 +244,9 @@ function Compare(props) {
 							<div>실험결과</div>
 							<div>run time : {result2.run_time} </div>
 							<div>carbon footprint : {result2.footprint} </div>
-							<div>car index : {result2.carIndex} </div>
-							<div>plane index : {result2.planeIndex} </div>
-							<div>tree index : {result2.treeIndex} </div>
+							<div>car index : {result2.car_index} </div>
+							<div>plane index : {result2.plane_index} </div>
+							<div>tree index : {result2.tree_index} </div>
 						</div>
 					</div>
 				</div>
@@ -251,6 +291,26 @@ function Compare(props) {
 						xAxis={[{ scaleType: 'band', data: ['car index'] }]}
 						yAxis={[{ label: '' }]}
 						series={ciSer}
+						width={200}
+						height={250}
+					/>
+					</div>
+					{/* plane index bar chart 추가 */}	
+					<div>				
+					<BarChart
+						xAxis={[{ scaleType: 'band', data: ['plane index'] }]}
+						yAxis={[{ label: '' }]}
+						series={piSer}
+						width={200}
+						height={250}
+					/>
+					</div>
+					{/* tree index bar chart 추가 */}	
+					<div>				
+					<BarChart
+						xAxis={[{ scaleType: 'band', data: ['tree index'] }]}
+						yAxis={[{ label: '' }]}
+						series={tiSer}
 						width={200}
 						height={250}
 					/>
