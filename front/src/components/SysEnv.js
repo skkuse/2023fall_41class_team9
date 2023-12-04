@@ -14,7 +14,7 @@ const SysEnv = () => {
                 </div>
                 <div className="row">
                     <div className="subsubtitle">Model</div>
-                    <div className="content">4</div>
+                    <div className="content">CPU MODEL</div>
                 </div>
             </div>
             <div className="subsection">
@@ -34,7 +34,7 @@ const SysEnv = () => {
             <div className="subsection">
                 <div className="subtitle">Location</div>
                 <div className="row">
-                    <div className="subsubtitle">Cloud computing</div>
+                    <div className="subsubtitle">Nation</div>
                     <div className="content">Korea</div>
                 </div>
             </div>
