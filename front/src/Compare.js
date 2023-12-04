@@ -16,31 +16,44 @@ function Compare(props) {
 	const [result2,setResult2] = useState(
 		[]
 	);
+	//result3,4,5,6 추가
+	const [result3,setResult3] = useState(
+		[]
+	);
+	const [result4,setResult4] = useState(
+		[]
+	);
+	const [result5,setResult5] = useState(
+		[]
+	);
+	const [result6,setResult6] = useState(
+		[]
+	);
 
-	//bar chart data example 
+	//bar chart data example
 	const [sampleSer,setSampleSer] = useState(
-		[	{ data: [11], }, 
+		[	{ data: [11], },
 			{ data: [7], },
 		]
-	); 
-	
+	);
+
 	const [rtSer,setRtSer] = useState(
 		[]
-	); 
+	);
 	const [fpSer,setFpSer] = useState(
 		[]
-	); 
+	);
 	const [ciSer,setCiSer] = useState(
 		[]
-	); 
+	);
 	//plane index bar chart 추가
 	const [piSer,setPiSer] = useState(
 		[]
-	); 
+	);
 	//tree index bar chart 추가
 	const [tiSer,setTiSer] = useState(
 		[]
-	); 
+	);
 
 	useEffect(()=>{
 		console.log('component mounted!');
@@ -54,7 +67,7 @@ function Compare(props) {
 
 	// const compare = () => {
 	// 	console.log('#compare~');
-		
+
 	// 	//###
 	// 	//let param = {ids: ids};
 	// 	//let param = {id_list: ids};
@@ -65,7 +78,7 @@ function Compare(props) {
 	// 		param = param + 'id_list[]='+ids[i]+'&';
 	// 	}
 	// 	console.log('#ids.length: '+ids.length);
-		
+
 	// 	console.log('#req param: '+JSON.stringify(param));
 	// 	//axios.post('/compare.do', param)
 	// 	//axios.get('/exp?id_list[]=6&id_list[]=7')
@@ -102,27 +115,38 @@ function Compare(props) {
 			{"title":"그린 알고리즘 자바코드 실험 3","run_time":"15","footprint":"37.23","car_index":"0.0005","plane_index":"0.00008","tree_index":"0.0005","coreNo":"4","memory":"4"},
 		];
 		processData(testData)
-		
-	}	
+
+	}
 	const processData = (data) => {
 		console.log("#processData~");
 		setResult1(data);
 		//console.log('#data length: '+data.length);
 		//console.log("#run_time: "+data[0].run_time);
-		
+
 		if (data.length>0) {
 			setResult1(data[0]);
 		}
 		if (data.length>1) {
 			setResult2(data[1]);
 		}
-		
+
+		//result 3,4,5,6추가
+		if (data.length>2) {
+			setResult3(data[2]);
+		}
+		if (data.length>3) {
+			setResult4(data[3]);
+		}
+		if (data.length>4) {
+			setResult5(data[4]);
+		}
+
 		//runtime bar chart data 처리
 		let rtList = [];
 		let rtData = {};
 		let rt = [];
 		for(var i=0; i<data.length; i++) {
-			rtData = {};			
+			rtData = {};
 			rt = [];
 
 			rt.push(parseFloat(data[i].run_time)); // rt = [10]
@@ -138,7 +162,7 @@ function Compare(props) {
 		let fpData = {};
 		let fp = [];
 		for(var i=0; i<data.length; i++) {
-			fpData = {};			
+			fpData = {};
 			fp = [];
 
 			fp.push(parseFloat(data[i].footprint));
@@ -153,7 +177,7 @@ function Compare(props) {
 		let ciData = {};
 		let ci = [];
 		for(var i=0; i<data.length; i++) {
-			ciData = {};			
+			ciData = {};
 			ci = [];
 
 			ci.push(parseFloat(data[i].car_index));
@@ -169,7 +193,7 @@ function Compare(props) {
 		let piData = {};
 		let pi = [];
 		for(var i=0; i<data.length; i++) {
-			piData = {};			
+			piData = {};
 			pi = [];
 
 			pi.push(parseFloat(data[i].plane_index));
@@ -179,12 +203,12 @@ function Compare(props) {
 		console.log("#piList: "+JSON.stringify(piList));
 		setPiSer(piList)
 
-		//tree index bar chart data 처리 추가 
+		//tree index bar chart data 처리 추가
 		let tiList = [];
 		let tiData = {};
 		let ti = [];
 		for(var i=0; i<data.length; i++) {
-			tiData = {};			
+			tiData = {};
 			ti = [];
 
 			ti.push(parseFloat(data[i].tree_index));
@@ -194,17 +218,52 @@ function Compare(props) {
 		console.log("#tiList: "+JSON.stringify(tiList));
 		setTiSer(tiList)
 
+		//data.length에 따라 result 3,4,5,6 div display 추가
+		if (data.length>2 && data.length <= 3) {
+			document.getElementById('r3').style.display = "flex";
+		}
+
+		if (data.length>3 && data.length <= 4) {
+			document.getElementById('r34').style.display = "flex";
+		}
+
+		if (data.length>4) {
+			document.getElementById('r34').style.display = "flex";
+			document.getElementById('r5').style.display = "flex";
+		}
+
 	}
-	
+
 
 
 	return (
 		<div>
 			<Menubar/>
-		
-			<div style={{textAlign:"center", margin:"10px", fontSize:"22px"}} >Green Algorithms Compare</div> 
-			
-			<div style={{display:"flex", margin:"5px"}}>
+
+			<div style={{textAlign:"center", margin:"10px", fontSize:"22px"}} >Green Algorithms Compare</div>
+
+			<div id="r1" style={{display:"none", margin:"25px"}}>
+				{/* left side */}
+				<div style={{width:"100%", margin:"5px"}}>
+					<div style={{margin:"5px"}}>
+					experiment name : {result3.title}
+					</div>
+
+					<div style={{border:"1px solid", width:"100%", xheight:"33vh", margin:"5px"}} >
+						<div style={{border:"1px solid", margin:"5px"}}>
+							<div>실험결과</div>
+							<div>run time : {result1.run_time} </div>
+							<div>carbon footprint : {result1.footprint} </div>
+							<div>car index : {result1.car_index} </div>
+							<div>plane index : {result1.plane_index} </div>
+							<div>tree index : {result1.tree_index} </div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			{/* result1,2 */}
+			<div id="r12" style={{display:"flex", margin:"2px"}}>
 				{/* left side */}
 				<div style={{width:"100%", margin:"5px"}}>
 					<div style={{margin:"5px"}}>
@@ -227,7 +286,7 @@ function Compare(props) {
 						</div>
 					</div>
 				</div>
-			
+
 				{/* right side */}
 				<div style={{width:"100%", margin:"5px"}}>
 					<div style={{margin:"5px"}}>
@@ -251,7 +310,91 @@ function Compare(props) {
 					</div>
 				</div>
 			</div>
-			
+
+			<div id="r3" style={{display:"none", margin:"25px"}}>
+				{/* left side */}
+				<div style={{width:"100%", margin:"5px"}}>
+					<div style={{margin:"5px"}}>
+					experiment name : {result3.title}
+					</div>
+
+					<div style={{border:"1px solid", width:"100%", xheight:"33vh", margin:"5px"}} >
+						<div style={{border:"1px solid", margin:"5px"}}>
+							<div>실험결과</div>
+							<div>run time : {result3.run_time} </div>
+							<div>carbon footprint : {result3.footprint} </div>
+							<div>car index : {result3.car_index} </div>
+							<div>plane index : {result3.plane_index} </div>
+							<div>tree index : {result3.tree_index} </div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			{/* result3,4 추가*/}
+			<div id="r34" style={{display:"none", margin:"2px"}}>
+				{/* left side */}
+				<div style={{width:"100%", margin:"5px"}}>
+					<div style={{margin:"5px"}}>
+					experiment name : {result3.title}
+					</div>
+
+					<div style={{border:"1px solid", width:"100%", xheight:"33vh", margin:"5px"}} >
+						<div style={{border:"1px solid", margin:"5px"}}>
+							<div>실험결과</div>
+							<div>run time : {result3.run_time} </div>
+							<div>carbon footprint : {result3.footprint} </div>
+							<div>car index : {result3.car_index} </div>
+							<div>plane index : {result3.plane_index} </div>
+							<div>tree index : {result3.tree_index} </div>
+						</div>
+					</div>
+				</div>
+
+				{/* right side */}
+				<div style={{width:"100%", margin:"5px"}}>
+					<div style={{margin:"5px"}}>
+					experiment name : {result4.title}
+					</div>
+
+					<div style={{border:"1px solid", width:"100%", xheight:"33vh", margin:"5px"}} >
+						<div style={{border:"1px solid", margin:"5px"}}>
+							<div>실험결과</div>
+							<div>run time : {result4.run_time} </div>
+							<div>carbon footprint : {result4.footprint} </div>
+							<div>car index : {result4.car_index} </div>
+							<div>plane index : {result4.plane_index} </div>
+							<div>tree index : {result4.tree_index} </div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+
+			{/* result5추가 */}
+			<div id="r5" style={{display:"none", margin:"25px"}}>
+				{/* left side */}
+				<div style={{width:"100%", margin:"5px"}}>
+					<div style={{margin:"5px"}}>
+					experiment name : {result5.title}
+					</div>
+
+					<div style={{border:"1px solid", width:"100%", xheight:"33vh", margin:"5px"}} >
+						<div style={{border:"1px solid", margin:"5px"}}>
+							<div>실험결과</div>
+							<div>run time : {result5.run_time} </div>
+							<div>carbon footprint : {result5.footprint} </div>
+							<div>car index : {result5.car_index} </div>
+							<div>plane index : {result5.plane_index} </div>
+							<div>tree index : {result5.tree_index} </div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+
 			{/* bar chart */}
 			<div style={{margin:"5px"}}>
 				<div style={{display:"flex", xborder:"1px solid", xwidth:"100%", height:"40vh"}}>
@@ -265,8 +408,8 @@ function Compare(props) {
 						height={250}
 					/>*/}
 					</div>
-					{/* runtime bar chart */}		
-					<div>				
+					{/* runtime bar chart */}
+					<div>
 					<BarChart
 						xAxis={[{ scaleType: 'band', data: ['runtime'] }]}
 						yAxis={[{ label: '' }]}
@@ -275,8 +418,8 @@ function Compare(props) {
 						height={250}
 					/>
 					</div>
-					{/* carbon footprint bar chart */}		
-					<div>				
+					{/* carbon footprint bar chart */}
+					<div>
 					<BarChart
 						xAxis={[{ scaleType: 'band', data: ['carbon footprint'] }]}
 						yAxis={[{ label: '' }]}
@@ -285,8 +428,8 @@ function Compare(props) {
 						height={250}
 					/>
 					</div>
-					{/* car index bar chart */}	
-					<div>				
+					{/* car index bar chart */}
+					<div>
 					<BarChart
 						xAxis={[{ scaleType: 'band', data: ['car index'] }]}
 						yAxis={[{ label: '' }]}
@@ -295,8 +438,8 @@ function Compare(props) {
 						height={250}
 					/>
 					</div>
-					{/* plane index bar chart 추가 */}	
-					<div>				
+					{/* plane index bar chart 추가 */}
+					<div>
 					<BarChart
 						xAxis={[{ scaleType: 'band', data: ['plane index'] }]}
 						yAxis={[{ label: '' }]}
@@ -305,8 +448,8 @@ function Compare(props) {
 						height={250}
 					/>
 					</div>
-					{/* tree index bar chart 추가 */}	
-					<div>				
+					{/* tree index bar chart 추가 */}
+					<div>
 					<BarChart
 						xAxis={[{ scaleType: 'band', data: ['tree index'] }]}
 						yAxis={[{ label: '' }]}
