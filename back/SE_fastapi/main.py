@@ -156,7 +156,7 @@ def get_exp(req: Request, resp: Response, id_list: List[int] = Query(None, alias
 
 def transform_carbonEmissions(carbonEmissions):
     passengerCar_EU_perkm = 175
-    flight_NY_SF = 570000
+    flight_KR_JP = 137000
     treeYear = 11000
 
     car_index = carbonEmissions / passengerCar_EU_perkm
