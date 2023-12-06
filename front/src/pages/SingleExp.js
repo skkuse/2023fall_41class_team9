@@ -77,9 +77,9 @@ function SingleExp(props) {
 				<SysEnv/>
 				<div className='result'>
 					<ResultBox img_src={'./img/runtime.png'} title={'Run Time'} value={exp.run_time} unit={"sec"}/>
-					<ResultBox img_src={'./img/co2.png'} title={'Carbon Footprint'} value={exp.footprint} unit={"kg CO2e"}/>
+					<ResultBox img_src={'./img/co2.png'} title={'Carbon Footprint'} value={exp.footprint} unit={"g CO2e"}/>
 					<ResultBox img_src={'./img/tree.png'} title={'Carbon sequestration'} value={exp.tree_index} unit={"tree-month"}/>
-					<ResultBox img_src={'./img/car.png'} title={'of a passenger car Seoul-Busan'} value={exp.car_index} unit={"%"}/>
+					<ResultBox img_src={'./img/car.png'} title={'in a passenger car'} value={exp.car_index} unit={"km"}/>
 					<ResultBox img_src={'./img/airplane.png'} title={'of a flight Korea-Japan'} value={exp.plane_index} unit={"%"}/>
 				</div>
 			</div>
