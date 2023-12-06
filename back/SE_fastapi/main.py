@@ -48,7 +48,7 @@ CI_aggregated = pd.read_csv('CI_aggregated.csv')
 CI_aggregated = CI_aggregated.rename(columns=CI_aggregated.iloc[0])
 CI_aggregated = CI_aggregated.drop(CI_aggregated.index[0])
 
-MODEL = 'A8-7680'
+MODEL = 'Xeon E5-2697 v4'
 MEMORY = {'nano':0.5, 'micro':1, 'small':2, 'medium':4}
 REGION = 'KR'
 
