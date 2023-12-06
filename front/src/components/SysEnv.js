@@ -14,14 +14,14 @@ const SysEnv = () => {
                 </div>
                 <div className="row">
                     <div className="subsubtitle">Model</div>
-                    <div className="content">A8-7680</div>
+                    <div className="content">Intel Xeon <br/>E5-2686 v4</div>
                 </div>
             </div>
             <div className="subsection">
                 <div className="subtitle">Memory</div>
                 <div className="row">
                     <div className="subsubtitle">Memory available</div>
-                    <div className="content">4</div>
+                    <div className="content">1GB</div>
                 </div>
             </div>
             <div className="subsection">
