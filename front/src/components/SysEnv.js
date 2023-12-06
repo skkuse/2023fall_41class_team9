@@ -10,11 +10,11 @@ const SysEnv = () => {
                 <div className="subtitle">CPUs</div>
                 <div className="row">
                     <div className="subsubtitle">Number of cores</div>
-                    <div className="content">4</div>
+                    <div className="content">1</div>
                 </div>
                 <div className="row">
                     <div className="subsubtitle">Model</div>
-                    <div className="content">CPU MODEL</div>
+                    <div className="content">A8-7680</div>
                 </div>
             </div>
             <div className="subsection">
