@@ -10,7 +10,7 @@ const host = window.location.hostname === "localhost"
 //axios.defaults.crossDomain = false;
 // axios.defaults.withCredentials = true;
 axios.defaults.withCredentials = false;
-axios.defaults.baseURL = 'http://3.34.50.151'
+axios.defaults.baseURL = host
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(<App />);
